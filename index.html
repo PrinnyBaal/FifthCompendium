@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>5e Compendium</title>
+
+  <!-- Jquery and Tag-it -->
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script> -->
+  <script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+  <!-- https://github.com/aehlke/tag-it/blob/master/README.markdown -->
+  <!-- ////// -->
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="Styling/sample.css">
+
+  <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+<link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
+
+
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+
+  <script src="src/ctrl/initialize.js"></script>
+  <script src="src/model/sheetStats.js"></script>
+  <script src="src/view/sheetLogic.js"></script>
+
+  <script>
+   window.addEventListener( "load", sheetProj.view.sheetLogic.setupUserInterface);
+  </script>
+</head>
+
+<style>
+</style>
+<body>
+  <div  class="container-fluid pt-2" id="shopBanner">
+    <div class="row  h-75" >
+      <div class="col-1 offset-1" id="bannerImage">
+
+      </div>
+      <div class="col my-auto" id="bannerTitle">
+        Archive of Definitely Not Nethys
+      </div>
+    </div>
+    <div class="row h-25">
+      <div class="offset-3 col-5" >
+        <p id="bannerTagline">"Is it going to far when even your srd is homebrewed?"</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="workSpace" >
+
+      <div id="navsegment" >
+        <div id="navbar">
+          <ul>
+            <li>Feats  <br> [You Are Here]</li>
+            <li>Classes <br> [Under Construction]</li>
+            <li>Spells<br> [Under Construction]</li>
+            <li>Mechanic Modules<br> [Under Construction]</li>
+          </ul>
+        </div>
+      </div>
+      <div id="contentSpace">
+        <div id="featSearch">
+          <!-- [Accepts Multiple comma seperated values]
+          Filter Name: <input type="text">
+          Filter Author: <input type="text"> -->
+          <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
+          By Name/Benefit:<input id="searchTags"></input><br>
+          By Source/Other: [disabled]<br>
+
+          <button onclick="featSearch()">Confirm</button>
+          <hr>
+          <h3 class="sourceTag" style="background-color:grey;">Selected Feat:</h3>
+        </div>
+        <div id="featDisplay" style="padding-left:2vw;">
+          <!-- <hr>
+          <h1 id="featName">Aberration-Bane Caster</h1><br>
+          <div style="padding-left:5vw;">
+            <span id="featFlavor">You can apply your specialized knowledge of hunting aberrations to make your spells harder for these monsters to resist.</span><br><br>
+            <span id="featPrereqs"><b>Prerequisites:</b> Caster level 4th, gillman, favored enemy (aberrations) class feature.</span><br><br>
+            <span id="featBenefit" style="white-space: pre-wrap;"><b>Benefit:</b>Whenever you gain a magic bonus on an attack roll with a ranged weapon, you can deduct any range penalties from your damage roll, instead of your attack roll.
+              Additionally, when you gain a magic bonus on a ranged attack roll, you can deal sneak attack damage to a target that has concealment (but not total concealment) as long as the attack otherwise
+              qualifies to deal sneak attack damage. The maximum number of sneak attack dice you can use in this way is equal to the value of your magic bonus on attack rolls.</span><br><br>
+            <h3 class="sourceTag" style="background-color:grey;">Source:</h3>
+            <span id="featSourcing"><b>Author:</b> Steven, <b>Collection:</b>Example text Compedium</span>
+          </div>
+          <hr> -->
+        </div>
+        <h3 class="sourceTag" style="background-color:grey;">Valid Feats:</h3>
+        <div id="featSelection">
+
+          <div class="resultCollection">
+            <h3 class="collectionTag" style="background-color:grey;">A:</h3>
+            <ul>
+              <li class="featListing" data-feat-name="adderStrike">Adder Strike</li>
+              <li class="featListing" data-feat-name="areaMonsters">Area monsters</li>
+              <li class="featListing" data-feat-name="araAra">Ara Arak</li>
+            </ul>
+          </div>
+
+          <div class="resultCollection">
+            <h3 class="collectionTag" style="background-color:grey;">B:</h3>
+            <ul>
+              <li>Adder Strike</li>
+              <li>Area monsters</li>
+              <li>Ara Arak</li>
+              <li>Adder Strike</li>
+              <li>Area monsters</li>
+              <li>Ara Arak</li>
+              <li>Adder Strike</li>
+              <li>Area monsters</li>
+              <li>Ara Arak</li>
+              <li>Adder Strike</li>
+              <li>Area monsters</li>
+              <li>Ara Arak</li>
+            </ul>
+          </div>
+
+          <div class="resultCollection">
+            <h3 class="collectionTag" style="background-color:grey;">C:</h3>
+            <ul>
+              <li>Adder Strike</li>
+              <li>Area monsters</li>
+              <li>Ara Arak</li>
+            </ul>
+          </div>
+
+          <div class="resultCollection">
+            <h3 class="collectionTag" style="background-color:grey;">D:</h3>
+            <ul>
+              <li>Adder Strike</li>
+              <li>Area monsters</li>
+              <li>Ara Arak</li>
+            </ul>
+          </div>
+
+          <div class="resultCollection">
+            <h3 class="collectionTag" style="background-color:grey;">E:</h3>
+            <ul>
+              <li>Adder Strike</li>
+              <li>Area monsters</li>
+              <li>Ara Arak</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+
+  </div>
+  <div id="alertBanner"></div>
+  <!-- <div id="footer" style="background-color:brown" class="container-fluid">
+
+      <div class="row h-100 pb-4">
+        <div class="col" >
+          <br>
+          <p><b>Steven Sonson</b></p>
+          <hr>
+          <p><emsp>ssonson@alumni.nd.edu</p>
+          <p><emsp>Bridgport, Connecticut</p>
+          <hr>
+          <p><b>Other Higgsy DnD Tools</b></p>
+          <a href="https://prinnybaal.github.io/Higgsy-s-U-Craft/">Higgsy's U-Craft (Magic Item Cost Estimation)</a><br>
+          <a href="https://prinnybaal.github.io/Higgsy-sModularSheet/">Higgsy's Modular Character Sheet[Beta]</a>
+          <hr>
+          <button onclick="resetStorage()">Reset To Default</button>
+        </div>
+        <div class="col" >
+          <br>
+          <p><b>Credits</b></p>
+          <hr>
+          <p><emsp>Armor Art Courtesy of Domigorgon:<a href="https://www.deviantart.com/domigorgon/art/Armor-Collection-746626202">Deviant Art</a>/<a href="https://www.patreon.com/posts/19030952">Patreon</a></p>
+          <p><emsp>Site Mascot Higgsy, originally sprite by: <a href="https://lemmasoft.renai.us/forums/viewtopic.php?f=52&t=48688&p=501514&hilit=female#p501514">GrammaHobbes</a></p>
+          <p><emsp>Default Card Template: <a href="https://www.reddit.com/r/DnD/comments/7c9hge/oc_really_proud_of_my_item_cards_bonus_template/">u/Bernalestomas</a></p>
+          <p><emsp>Site Background: <a href="https://www.toptal.com/designers/subtlepatterns/ep-natural-black/">EP Natural Black from Toptal Subtle Patterns</a></p>
+          <a href="https://icons8.com/icon/80339/delete">Delete icon by Icons8</a>
+
+
+
+        </div>
+      </div>
+  </div> -->
+</body>
