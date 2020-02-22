@@ -34,17 +34,21 @@ html {
   border-radius: 5%;
   height: auto;
 }
+#workSpace #navsegment #navbar .navEntry.selectedNav {
+  font-weight: bold;
+  text-decoration: underline;
+}
 #workSpace #contentSpace {
   width: 70vw;
   min-width: 300px;
   padding-left: 5vw;
 }
-#workSpace #contentSpace #featSelection {
+#workSpace #contentSpace .selectionSpace {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
 }
-#workSpace #contentSpace #featSelection .resultCollection {
+#workSpace #contentSpace .selectionSpace .resultCollection {
   background-color: white;
   color: blue;
   width: 30%;

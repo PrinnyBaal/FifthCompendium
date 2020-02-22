@@ -57,6 +57,15 @@ html {
       border: 2px solid silver;
       border-radius:5%;
       height:auto;
+
+      .navEntry{
+
+      }
+
+      .navEntry.selectedNav{
+        font-weight: bold;
+        text-decoration: underline;
+      }
     }
   }
 
@@ -66,7 +75,7 @@ html {
     min-width:300px;
     padding-left:5vw;
 
-    #featSelection{
+    .selectionSpace{
       display:flex;
       justify-content:space-around;
       flex-wrap:wrap;

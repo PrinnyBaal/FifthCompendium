@@ -9,7 +9,14 @@
 // }
 
 let featList=false;
+let spellList=false;
 let searchTags=[];
+let spellFilter={
+  textTags:[],
+  levelTags:["0","1","2","3","4","5","6","7","8","9"],
+  schoolTags:["transmutation", "abjuration", "conjuration", "necromancy", "enchantment", "evocation", "illusion", "divination", "universal"],
+
+}
 
 
 

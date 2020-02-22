@@ -15,6 +15,16 @@
   <!-- https://github.com/aehlke/tag-it/blob/master/README.markdown -->
   <!-- ////// -->
 
+  <!-- bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <!-- multiselect -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="Styling/sample.css">
 
@@ -22,8 +32,7 @@
 <link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
 
 
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+
 
   <script src="src/ctrl/initialize.js"></script>
   <script src="src/model/sheetStats.js"></script>
@@ -59,132 +68,71 @@
       <div id="navsegment" >
         <div id="navbar">
           <ul>
-            <li>Feats  <br> [You Are Here]</li>
-            <li>Classes <br> [Under Construction]</li>
-            <li>Spells<br> [Under Construction]</li>
-            <li>Mechanic Modules<br> [Under Construction]</li>
+            <li class="navEntry" id="featNav">Feats  </li><br>
+            <li class="navEntry" id="classNav">Classes  [Under Construction]</li><br>
+            <li class="navEntry" id="itemNav">Wondrous Items  [Under Construction]</li><br>
+            <li class="navEntry" id="spellNav">Spells</li><br>
+            <li class="navEntry" id="moduleNav">Mechanic Modules <br>[Under Construction]</li><br>
+            <li class="navEntry selectedNav" id="customNav">Customization</li><br>
           </ul>
         </div>
       </div>
       <div id="contentSpace">
-        <div id="featSearch">
+        <div id="spellSearch">
           <!-- [Accepts Multiple comma seperated values]
           Filter Name: <input type="text">
           Filter Author: <input type="text"> -->
           <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
-          By Name/Benefit:<input id="searchTags"></input><br>
-          By Source/Other: [disabled]<br>
+          Search:<input id="searchTags"></input><br>
+          Spell Levels:<form id="spellLevelFilter" class="form-check form-check-inline">
+            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox0" value="0">
+            <label class="form-check-label" for="spellCheckBox0">0</label>]&nbsp;
+            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox1" value="1">
+            <label class="form-check-label" for="spellCheckBox1">1</label>]&nbsp;
+            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox2" value="2">
+            <label class="form-check-label" for="spellCheckBox2">2</label>]&nbsp;
+            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox3" value="3">
+            <label class="form-check-label" for="spellCheckBox3">3</label>]&nbsp;
+            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox4" value="4">
+            <label class="form-check-label" for="spellCheckBox4">4</label>]&nbsp;
+            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox5" value="5">
+            <label class="form-check-label" for="spellCheckBox5">5</label>]&nbsp;
+            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox6" value="6">
+            <label class="form-check-label" for="spellCheckBox6">6</label>]&nbsp;
+            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox7" value="7">
+            <label class="form-check-label" for="spellCheckBox7">7</label>]&nbsp;
+            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox8" value="8">
+            <label class="form-check-label" for="spellCheckBox8">8</label>]&nbsp;
+            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox9" value="9">
+            <label class="form-check-label" for="spellCheckBox9">9</label>]&nbsp;
+          </form><br><br>
+          Schools:<select id="spellSchoolFilter" title="NO SCHOOLS SELECTED!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
+              <option value="abjuration" selected>Abjuration</option>
+              <option value="conjuration" selected>Conjuration</option>
+              <option value="divination" selected>Divination</option>
+              <option value="enchantment" selected>Enchantment</option>
+              <option value="evocation" selected>Evocation</option>
+              <option value="illusion" selected>Illusion</option>
+              <option value="necromancy" selected>Necromancy</option>
+              <option value="transmutation" selected>Transmutation</option>
+              <option value="universal" selected>Universal</option>
+            </select><br><br>
 
-          <button onclick="featSearch()">Confirm</button>
+
+          <button onclick="Spells.search()">Confirm</button>
           <hr>
-          <h3 class="sourceTag" style="background-color:grey;">Selected Feat:</h3>
+          <h3 class="sourceTag" style="background-color:grey;">Selected Spell:</h3>
         </div>
-        <div id="featDisplay" style="padding-left:2vw;">
-          <!-- <hr>
-          <h1 id="featName">Aberration-Bane Caster</h1><br>
-          <div style="padding-left:5vw;">
-            <span id="featFlavor">You can apply your specialized knowledge of hunting aberrations to make your spells harder for these monsters to resist.</span><br><br>
-            <span id="featPrereqs"><b>Prerequisites:</b> Caster level 4th, gillman, favored enemy (aberrations) class feature.</span><br><br>
-            <span id="featBenefit" style="white-space: pre-wrap;"><b>Benefit:</b>Whenever you gain a magic bonus on an attack roll with a ranged weapon, you can deduct any range penalties from your damage roll, instead of your attack roll.
-              Additionally, when you gain a magic bonus on a ranged attack roll, you can deal sneak attack damage to a target that has concealment (but not total concealment) as long as the attack otherwise
-              qualifies to deal sneak attack damage. The maximum number of sneak attack dice you can use in this way is equal to the value of your magic bonus on attack rolls.</span><br><br>
-            <h3 class="sourceTag" style="background-color:grey;">Source:</h3>
-            <span id="featSourcing"><b>Author:</b> Steven, <b>Collection:</b>Example text Compedium</span>
-          </div>
-          <hr> -->
+        <div id="spellDisplay" style="padding-left:2vw;">
+
         </div>
-        <h3 class="sourceTag" style="background-color:grey;">Valid Feats:</h3>
-        <div id="featSelection">
-
-          <div class="resultCollection">
-            <h3 class="collectionTag" style="background-color:grey;">A:</h3>
-            <ul>
-              <li class="featListing" data-feat-name="adderStrike">Adder Strike</li>
-              <li class="featListing" data-feat-name="areaMonsters">Area monsters</li>
-              <li class="featListing" data-feat-name="araAra">Ara Arak</li>
-            </ul>
-          </div>
-
-          <div class="resultCollection">
-            <h3 class="collectionTag" style="background-color:grey;">B:</h3>
-            <ul>
-              <li>Adder Strike</li>
-              <li>Area monsters</li>
-              <li>Ara Arak</li>
-              <li>Adder Strike</li>
-              <li>Area monsters</li>
-              <li>Ara Arak</li>
-              <li>Adder Strike</li>
-              <li>Area monsters</li>
-              <li>Ara Arak</li>
-              <li>Adder Strike</li>
-              <li>Area monsters</li>
-              <li>Ara Arak</li>
-            </ul>
-          </div>
-
-          <div class="resultCollection">
-            <h3 class="collectionTag" style="background-color:grey;">C:</h3>
-            <ul>
-              <li>Adder Strike</li>
-              <li>Area monsters</li>
-              <li>Ara Arak</li>
-            </ul>
-          </div>
-
-          <div class="resultCollection">
-            <h3 class="collectionTag" style="background-color:grey;">D:</h3>
-            <ul>
-              <li>Adder Strike</li>
-              <li>Area monsters</li>
-              <li>Ara Arak</li>
-            </ul>
-          </div>
-
-          <div class="resultCollection">
-            <h3 class="collectionTag" style="background-color:grey;">E:</h3>
-            <ul>
-              <li>Adder Strike</li>
-              <li>Area monsters</li>
-              <li>Ara Arak</li>
-            </ul>
-          </div>
-
+        <h3 class="sourceTag" style="background-color:grey;">Valid Spells:</h3>
+        <div id="spellSelection" class="selectionSpace">
         </div>
       </div>
 
 
   </div>
   <div id="alertBanner"></div>
-  <!-- <div id="footer" style="background-color:brown" class="container-fluid">
 
-      <div class="row h-100 pb-4">
-        <div class="col" >
-          <br>
-          <p><b>Steven Sonson</b></p>
-          <hr>
-          <p><emsp>ssonson@alumni.nd.edu</p>
-          <p><emsp>Bridgport, Connecticut</p>
-          <hr>
-          <p><b>Other Higgsy DnD Tools</b></p>
-          <a href="https://prinnybaal.github.io/Higgsy-s-U-Craft/">Higgsy's U-Craft (Magic Item Cost Estimation)</a><br>
-          <a href="https://prinnybaal.github.io/Higgsy-sModularSheet/">Higgsy's Modular Character Sheet[Beta]</a>
-          <hr>
-          <button onclick="resetStorage()">Reset To Default</button>
-        </div>
-        <div class="col" >
-          <br>
-          <p><b>Credits</b></p>
-          <hr>
-          <p><emsp>Armor Art Courtesy of Domigorgon:<a href="https://www.deviantart.com/domigorgon/art/Armor-Collection-746626202">Deviant Art</a>/<a href="https://www.patreon.com/posts/19030952">Patreon</a></p>
-          <p><emsp>Site Mascot Higgsy, originally sprite by: <a href="https://lemmasoft.renai.us/forums/viewtopic.php?f=52&t=48688&p=501514&hilit=female#p501514">GrammaHobbes</a></p>
-          <p><emsp>Default Card Template: <a href="https://www.reddit.com/r/DnD/comments/7c9hge/oc_really_proud_of_my_item_cards_bonus_template/">u/Bernalestomas</a></p>
-          <p><emsp>Site Background: <a href="https://www.toptal.com/designers/subtlepatterns/ep-natural-black/">EP Natural Black from Toptal Subtle Patterns</a></p>
-          <a href="https://icons8.com/icon/80339/delete">Delete icon by Icons8</a>
-
-
-
-        </div>
-      </div>
-  </div> -->
 </body>
