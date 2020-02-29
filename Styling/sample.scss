@@ -57,7 +57,7 @@ html {
       border: 2px solid silver;
       border-radius:5%;
       height:auto;
-
+      overflow:hidden;
       .navEntry{
 
       }
@@ -104,6 +104,19 @@ html {
 
 
 ///////
+
+.statTable{
+  border: 1px solid black;
+  background-color: #EEEEEE;
+  th{
+    background: red;
+    text-align:center;
+  }
+  td{
+    border:2px solid black;
+    text-align:center;
+  }
+}
 
 
 .hoverFlow{

@@ -5,7 +5,7 @@ sheetProj.view.sheetLogic = {
     $("#searchTags").tagit({caseSensitive:false});
     loadData();
     activateNavbar();
-    Pages.Customize();
+    //Pages.Customize();
   }
 };
 
@@ -32,6 +32,16 @@ function activateNavbar(){
     $(".selectedNav").removeClass("selectedNav");
     $(event.target).addClass("selectedNav");
   });
+  $("#itemNav").click(()=>{
+    Pages.MagicItems();
+    $(".selectedNav").removeClass("selectedNav");
+    $(event.target).addClass("selectedNav");
+  });
+  $("#creatureNav").click(()=>{
+    Pages.Creatures();
+    $(".selectedNav").removeClass("selectedNav");
+    $(event.target).addClass("selectedNav");
+  });
 }
 
 const Pages={
@@ -41,10 +51,10 @@ const Pages={
       Filter Name: <input type="text">
       Filter Author: <input type="text"> -->
       <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
-      By Name/Benefit:<input class="tagIt" id="searchTags"></input><br>
-      By Source/Other: [disabled]<br>
+      By Name/Benefit:<input class="tagit" id="searchTags"></input><br>
+      Source/Author Search:<input class="tagit" id="sourceTags"></input><br><br>
 
-      <button onclick="featSearch()">Confirm</button>
+      <button onclick="Feats.search()">Confirm</button>
       <hr>
       <h3 class="sourceTag" style="background-color:grey;">Selected Feat:</h3>
     </div>
@@ -55,8 +65,7 @@ const Pages={
     <div id="featSelection" class="selectionSpace">
     </div>`;
     Pages.SetContent(pageContent);
-  //  $("#searchTags").tagit({caseSensitive:false});
-    createFeatList();
+    Feats.createList();
 
   },
   Customize:()=>{
@@ -77,7 +86,7 @@ const Pages={
       Filter Name: <input type="text">
       Filter Author: <input type="text"> -->
       <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
-      Search:<input class="tagIt" id="searchTags"></input><br>
+      Search:<input class="tagit" id="searchTags"></input><br>
       Spell Levels:<form id="spellLevelFilter" class="form-check form-check-inline">
         [<input checked class="form-check-input" type="checkbox" id="spellCheckBox0" value="0">
         <label class="form-check-label" for="spellCheckBox0">0</label>]&nbsp;
@@ -124,14 +133,127 @@ const Pages={
     <div id="spellSelection" class="selectionSpace">
     </div>`;
     Pages.SetContent(pageContent);
-    //$("#searchTags").tagit({caseSensitive:false});
+    $("#searchTags").tagit({caseSensitive:false});
     Spells.createList();
 
+  },
+  MagicItems:()=>{
+    let pageContent=`  <div id="itemSearch">
+        <!-- [Accepts Multiple comma seperated values]
+        Filter Name: <input type="text">
+        Filter Author: <input type="text"> -->
+        <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
+        Text Search:<input id="searchTags" class="tagit"></input><br>
+        Attunement Filter:<br><form id="attunementFilter">
+            <label class="radio-inline">
+              <input type="radio" name="attuneRadio" checked value="either">Either
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="attuneRadio"  value="attuned">Requires attunement
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="attuneRadio" value="unattuned">No attunement required
+            </label>
+          </form>
+        <br><br>
+        Item Type Filter:<br><select id="itemTypeFilter" title="NO TYPES SELECTED!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
+            <option value="weapon" selected>Weapons</option>
+            <option value="armor" selected>Armor</option>
+            <option value="ring" selected>Rings</option>
+            <option value="wondrous" selected>Wondrous Items</option>
+            <option value="staff" selected>Staves</option>
+            <option value="rod" selected>Rods</option>
+            <option value="wand" selected>Wands</option>
+            <option value="potion" selected>Potions</option>
+            <option value="scroll" selected>Scrolls</option>
+          </select><br><br>
+        Item Rarity Filter:<br><select id="itemRarityFilter" title="NO RARITIES SELECTED!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
+            <option value="common" selected>Common</option>
+            <option value="uncommon" selected>Uncommon</option>
+            <option value="rare" selected>Rare</option>
+            <option value="very rare" selected>Very Rare</option>
+            <option value="legendary" selected>Legendary</option>
+
+          </select><br><br>
+
+
+        <button onclick="Items.search()">Search</button>
+        <hr>
+        <h3 class="sourceTag" style="background-color:grey;">Selected Item:</h3>
+      </div>
+      <div id="itemDisplay" style="padding-left:2vw;">
+        <hr>
+        <hr>
+      </div>
+      <h3 class="sourceTag" style="background-color:grey;">Valid Items:</h3>
+      <div id="itemSelection" class="selectionSpace">
+      </div>`;
+    Pages.SetContent(pageContent);
+    Items.createList();
+  },
+  Creatures:()=>{
+    let pageContent=`<div id="creatureSearch">
+      <!-- [Accepts Multiple comma seperated values]
+      Filter Name: <input type="text">
+      Filter Author: <input type="text"> -->
+      <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
+      Text Search:<input id="searchTags" class="tagit"></input><br>
+
+      <div style="display:flex;">
+        <div style="text-align:center;"><u>Min</u><br>
+          <input id="crMinFilter" type="number" value=${creatureFilter.cr.min}>
+        </div>
+        <div  style="text-align:center; align-self:flex-end; font-size:1.5em;">-|CR Range|-</div>
+        <div  style="text-align:center;"><u>Max</u><br>
+          <input id="crMaxFilter" type="number" value=${creatureFilter.cr.max}></div>
+      </div>
+      <br><br>
+      Alignment Filter:<br><select id="creatureAlignmentFilter" title="NO ALIGNMENTS SELECTED!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
+          <option value="lawful good" ${creatureFilter.alignment.includes("lawful good")? "selected":""}>Lawful Good</option>
+          <option value="lawful neutral" ${creatureFilter.alignment.includes("lawful neutral")? "selected":""}>Lawful Neutral</option>
+          <option value="lawful evil" ${creatureFilter.alignment.includes("lawful evil")? "selected":""}>Lawful Evil</option>
+          <option value="neutral good" ${creatureFilter.alignment.includes("neutral good")? "selected":""}>Neutral Good</option>
+          <option value="neutral" ${creatureFilter.alignment.includes("neutral")? "selected":""}>True Neutral</option>
+          <option value="neutral evil" ${creatureFilter.alignment.includes("neutral evil")? "selected":""}>Neutral Evil</option>
+          <option value="chaotic good" ${creatureFilter.alignment.includes("chaotic good")? "selected":""}>Chaotic Good</option>
+          <option value="chaotic neutral" ${creatureFilter.alignment.includes("chaotic neutral")? "selected":""}>Chaotic Neutral</option>
+          <option value="chaotic evil" ${creatureFilter.alignment.includes("chaotic evil")? "selected":""}>Chaotic Evil</option>
+          <option value="unaligned" ${creatureFilter.alignment.includes("unaligned")? "selected":""}>Unaligned</option>
+        </select><br><br>
+      Type Filter:<br><select id="creatureTypeFilter" title="NO TYPES SELECTED!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
+          ${getCreatureTypes()}
+        </select><br><br>
+
+
+      <button onclick="Creatures.search()">Search</button>
+      <hr>
+      <h3 class="sourceTag" style="background-color:grey;">Selected Creature:</h3>
+    </div>
+    <div id="creatureDisplay" style="padding-left:2vw;">
+      <hr>
+
+      <hr>
+    </div>
+    <h3 class="sourceTag" style="background-color:grey;">Valid Items:</h3>
+    <div id="creatureSelection" class="selectionSpace">
+    </div>`;
+
+    function getCreatureTypes(){
+      let options=``;
+      creatureFilter.loadedTypes.forEach((type)=>{
+        options+=`<option value="${type}" ${creatureFilter.type.includes(type)? "selected":""}>${type}</option>`;
+      });
+      return options;
+
+    }
+    creatureFilter.textTags=[];
+    Pages.SetContent(pageContent);
+    Creatures.createList();
   },
   SetContent:(newContent)=>{
     $("#contentSpace").html(newContent);
     $(".selectpicker").selectpicker();
-    $(".tagIt").tagit({caseSensitive:false});
+    $(".tagit").tagit({caseSensitive:false});
 
   }
 }
@@ -284,6 +406,469 @@ const Spells={
   }
 }
 
+const Items={
+  search:()=>{
+
+
+    itemFilter.textTags=$("#searchTags").tagit("assignedTags");
+
+
+    itemFilter.attunement=$("input[name*='attuneRadio']:checked").val();
+
+    itemFilter.itemTypes=$("#itemTypeFilter").val();
+    itemFilter.rarity=$("#itemRarityFilter").val();
+
+
+
+
+
+    Items.createList();
+  },
+  createList:()=>{
+    let itemKeys=Object.keys(itemList);
+    let finalCollection="";
+    let currentCollection="";
+    let listingCount=0;
+
+    //sort and filter
+    itemKeys.sort(alphabetizeKeys);
+
+    itemKeys=itemKeys.filter((item)=>{
+      return itemKeyFilter(item);
+    });
+
+
+    while (itemKeys.length){
+      let key=itemKeys.shift();
+      let item=itemList[key];
+
+      if (listingCount==0){
+        currentCollection=`<div class="resultCollection">
+          <h3 class="collectionTag" style="background-color:grey;">~</h3>
+          <ul>`;
+      }
+
+      currentCollection+=`<li class="itemListing" data-item-id="${key}">${item.Name}</li>`;
+
+      if (listingCount==4 || itemKeys.length==0){
+
+          currentCollection+=`</ul>
+        </div>`;
+        finalCollection+=currentCollection;
+        listingCount=0;
+      }else{
+        listingCount++;
+      }
+
+
+
+    }
+
+    $("#itemSelection").html(finalCollection);
+
+    if (finalCollection.length==0){
+      ci.fyiUser("No items to show, try loosening your search results!");
+    }
+    $(".itemListing").click(Items.displayItem);
+    jumpTo("itemSelection");
+
+    function alphabetizeKeys(a, b){
+      return itemList[a].Name.localeCompare(itemList[b].Name);
+    }
+
+    function itemKeyFilter(item){
+
+      item=itemList[item];
+      //search filter
+      if (itemFilter.textTags.length){
+        for (let i=0; i<itemFilter.textTags.length; i++){
+          let textCheck=item.Name+item.Type+item.Rarity+item.Description;
+          if (item.Attunement){textCheck+=item.Attunement};
+          if (!textCheck.toLowerCase().includes(itemFilter.textTags[i].toLowerCase())){
+
+            console.log("doesn't include: "+itemFilter.textTags[i].toLowerCase());
+            return false;
+          }
+
+        }
+      }
+
+      //attunement filter
+      switch (itemFilter.attunement){
+        case "attuned":
+          if(!item.Attunement){
+
+            return false;
+          }
+          break;
+        case "unattuned":
+          if(item.Attunement){
+
+            return false;
+          }
+          break;
+        case "either":
+          break;
+        default:
+          console.log("item attune filter made a mistake");
+          break;
+      }
+      //rarity filter
+      if (!itemFilter.rarity.includes(item.Rarity)){
+        console.log(itemFilter.rarity);
+        console.log("doesn't include: ");
+        console.log(item.Rarity);
+        return false;
+      }
+
+      //type filter
+      for (let i=0; i<itemFilter.itemTypes.length; i++){
+        if (item.Type.toLowerCase().includes(itemFilter.itemTypes[i])){
+          break;
+        }
+        if (i+1>=itemFilter.itemTypes.length){
+          return false
+        }
+      }
+
+
+      return true;
+    }
+  },
+  displayItem:(event)=>{
+    // console.log(this);
+
+    let item = itemList[event.target.getAttribute("data-item-id")];
+    let displayText=`<hr>
+    <h1 id="itemName">${item.Name}</h1><br>
+    <div style="padding-left:5vw;">
+      <span id="itemTypeline"><i>${item.Type}, ${item.Rarity} ${item.Attunement? `(${item.Attunement})`:""}</i></span><br><br>
+      <span id="itemDescription" style="white-space: pre-wrap;">${item.Description}</span><br><br>
+      <h3 class="sourceTag" style="background-color:grey;">Source:</h3>
+      <span id="itemSourcing"><b>Author:</b> ${item.Author ? item.Author:"Unknown"}, <b>Collection:</b>${item.Source ? item.Source:"Unknown"}</span>
+    </div>
+    <hr>`;
+    $("#itemDisplay").html(displayText);
+    jumpTo("itemDisplay");
+  }
+}
+
+const Creatures={
+  search:()=>{
+
+
+    creatureFilter.textTags=$("#searchTags").tagit("assignedTags");
+
+    creatureFilter.cr.min=$("#crMinFilter").val();
+    creatureFilter.cr.max=$("#crMaxFilter").val();
+    // itemFilter.attunement=$("input[name*='attuneRadio']:checked").val();
+
+    creatureFilter.type=$("#creatureTypeFilter").val();
+    creatureFilter.alignment=$("#creatureAlignmentFilter").val();
+
+
+
+
+
+    Creatures.createList();
+  },
+  createList:()=>{
+    let creatureKeys=Object.keys(creatureList);
+    let finalCollection="";
+    let currentCollection="";
+    let listingCount=0;
+
+    //sort and filter
+    console.log(creatureKeys);
+    creatureKeys.sort(alphabetizeKeys);
+    console.log(creatureKeys);
+    creatureKeys=creatureKeys.filter((creature)=>{
+      return creatureKeyFilter(creature);
+    });
+    console.log(creatureKeys);
+
+
+    while (creatureKeys.length){
+      let key=creatureKeys.shift();
+      let creature=creatureList[key];
+
+      if (listingCount==0){
+        currentCollection=`<div class="resultCollection">
+          <h3 class="collectionTag" style="background-color:grey;">~</h3>
+          <ul>`;
+      }
+
+      currentCollection+=`<li class="creatureListing" data-creature-id="${key}">${creature.name}</li>`;
+
+      if (listingCount==4 || creatureKeys.length==0){
+
+          currentCollection+=`</ul>
+        </div>`;
+        finalCollection+=currentCollection;
+        listingCount=0;
+      }else{
+        listingCount++;
+      }
+
+
+
+    }
+
+    $("#creatureSelection").html(finalCollection);
+
+    if (finalCollection.length==0){
+      ci.fyiUser("No creatures to show, try loosening your search results!");
+    }
+    $(".creatureListing").click(Creatures.displayCreature);
+    jumpTo("creatureSelection");
+
+    function alphabetizeKeys(a, b){
+
+      if (!creatureList[a].name){
+        console.log(creatureList[a]);
+      }
+      return creatureList[a].name.localeCompare(creatureList[b].name);
+    }
+
+    function creatureKeyFilter(creature){
+
+      creature=creatureList[creature];
+      //search filter
+      if (creatureFilter.textTags.length){
+        let textCheck=creature.toSring().toLowerCase();
+        for (let i=0; i<creatureFilter.textTags.length; i++){
+
+
+          if (!textCheck.includes(creatureFilter.textTags[i].toLowerCase())){
+
+            console.log("doesn't include: "+creatureFilter.textTags[i].toLowerCase());
+            return false;
+          }
+
+        }
+      }
+
+      //cr filter
+      if (parseInt(creature.challenge_rating)>creatureFilter.cr.max || parseInt(creature.challenge_rating)<creatureFilter.cr.min){
+        return false;
+      }
+      //alignmenty filter
+      if (!creatureFilter.alignment.includes(creature.alignment)){
+        console.log(creatureFilter.alignment);
+        console.log("doesn't include: ");
+        console.log(creature.alignment);
+        return false;
+      }
+
+      //type filter
+      for (let i=0; i<creatureFilter.type.length; i++){
+        if (creature.type.toLowerCase().includes(creatureFilter.type[i])){
+          break;
+        }
+        if (i+1>=creatureFilter.type.length){
+          return false
+        }
+      }
+
+
+      return true;
+    }
+  },
+  displayCreature:(event)=>{
+    // console.log(this);
+
+    let creature = creatureList[event.target.getAttribute("data-creature-id")];
+    let displayText=`<hr>
+    <h1 id="creatureName">${creature.name} [CR:${creature.challenge_rating}]</h1><br>
+    <div style="padding-left:5vw;">
+      <span id="creatureTypeline"><i>${creature.size} ${creature.type}${creature.subtype? ` [${creature.subtype}]`:""}, ${creature.alignment}</i></span><br><br>
+
+      <h5 class="sourceTag" style="background-color:grey;">Quick Stats:</h5><br>
+        <p><b>Armor Class:</b> ${creature.armor_class}</p>
+        <p><b>Hit Points:</b>${creature.hit_points} (${creature.hit_dice})</p>
+        <p><b>Speed:</b>${creature.speed}</p>
+        <table style="width:100%" class="statTable">
+          <tr>
+            <th></th>
+            <th>STR</th>
+            <th>DEX</th>
+            <th>CON</th>
+            <th>INT</th>
+            <th>WIS</th>
+            <th>CHA</th>
+          </tr>
+          <tr>
+            <td>Score:</td>
+            <td>${creature.strength+"("+appendMod(creature.strength)+")"}</td>
+            <td>${creature.dexterity+"("+appendMod(creature.dexterity)+")"}</td>
+            <td>${creature.constitution+"("+appendMod(creature.constitution)+")"}</td>
+            <td>${creature.intelligence+"("+appendMod(creature.intelligence)+")"}</td>
+            <td>${creature.wisdom+"("+appendMod(creature.wisdom)+")"}</td>
+            <td>${creature.charisma+"("+appendMod(creature.charisma)+")"}</td>
+          </tr>
+          <tr>
+            <td>Save:</td>
+            <td>${creature.strength_save!==undefined? `<b>+${creature.strength_save}</b>`:appendMod(creature.strength)}</td>
+            <td>${creature.dexterity_save!==undefined? `<b>+${creature.dexterity_save}</b>`:appendMod(creature.dexterity)}</td>
+            <td>${creature.constitution_save!==undefined? `<b>+${creature.constitution_save}</b>`:appendMod(creature.constitution)}</td>
+            <td>${creature.intelligence_save!==undefined? `<b>+${creature.intelligence_save}</b>`:appendMod(creature.intelligence)}</td>
+            <td>${creature.wisdom_save!==undefined? `<b>+${creature.wisdom_save}</b>`:appendMod(creature.wisdom)}</td>
+            <td>${creature.charisma_save!==undefined? `<b>+${creature.charisma_save}</b>`:appendMod(creature.charisma)}</td>
+          </tr>
+        </table>
+
+        <p><b>Senses:</b>${creature.senses}</p>
+        <p><b>Languages:</b>${creature.languages}</p>
+      <h5 class="sourceTag" style="background-color:grey;">Defenses:</h5><br>
+        ${creature.damage_vulnerabilities? ` <p><b>Vulnerable to:</b>${creature.damage_vulnerabilities}</p>`:""}
+        ${creature.damage_vulnerabilities? ` <p><b>Resistant to:</b>${creature.damage_resistances}</p>`:""}
+        ${creature.damage_immunities|creature.condition_immunities? ` <p><b>Immune to:</b>${creature.damage_resistances+creature.condition_immunities}</p>`:""}
+      <h5 class="sourceTag" style="background-color:grey;">Specials:</h5><br>
+        ${getSpecials(creature)}
+      <h5 class="sourceTag" style="background-color:grey;">Actions:</h5><br>
+        ${getActions(creature)}
+      <h5 class="sourceTag" style="background-color:grey;">Legendary Actions:</h5><br>
+        ${getLegendaryActions(creature)}
+      <h3 class="sourceTag" style="background-color:grey;">Source:</h3>
+      <span id="creatureSourcing"><b>Author:</b> ${creature.Author ? creature.Author:"Unknown"}, <b>Collection:</b>${creature.Source ? creature.Source:"Unknown"}</span>
+    </div>
+    <hr>`;
+    $("#creatureDisplay").html(displayText);
+    jumpTo("creatureDisplay");
+    function appendMod(stat){
+      let moddedStat="";
+      let mod;
+      stat=parseInt(stat);
+      //-5 is the penalty for haivng a stat of 0.  every 2 points in a stat is a +1 bonus
+      mod = Math.floor(stat/2)-5;
+      moddedStat+=`${mod>=0? "+":""}${mod}`;
+      return moddedStat;
+    }
+
+    function getSpecials(creature){
+      let markedText="";
+      if (creature.special_abilities===undefined){return markedText}
+      creature.special_abilities.forEach((ability)=>{
+        markedText+=`<p><b>${ability.name}:</b></p>
+        <p>${ability.desc}</p>`;
+      });
+
+      return markedText;
+    }
+    function getActions(creature){
+      let markedText="";
+      if (creature.actions===undefined){return markedText}
+      creature.actions.forEach((ability)=>{
+        markedText+=`<p><b>${ability.name}:</b></p>
+        <p>${ability.desc}</p>`;
+      });
+
+      return markedText;
+    }
+    function getLegendaryActions(creature){
+      let markedText="";
+      if (creature.legendary_actions===undefined){return markedText}
+      creature.legendary_actions.forEach((ability)=>{
+        markedText+=`<p><b>${ability.name}:</b></p>
+        <p>${ability.desc}</p>`;
+      });
+
+      return markedText;
+    }
+  }
+}
+
+const Feats={
+  search:()=>{
+    console.log($("#searchTags").tagit("assignedTags"));
+    featFilter.textTags=$("#searchTags").tagit("assignedTags");
+    featFilter.sourceTags=$("#sourceTags").tagit("assignedTags");
+
+
+    Feats.createList();
+  },
+  createList:()=>{
+    let featKeys=Object.keys(featList);
+    let finalCollection="";
+    let currentCollection="";
+    let listingCount=0;
+    featKeys.sort(alphabetizeKeys);
+
+      featKeys=featKeys.filter((feat)=>{
+        return featKeyFilter(feat);
+      });
+
+
+    while (featKeys.length){
+      let key=featKeys.shift();
+      let feat=featList[key];
+
+      if (listingCount==0){
+        currentCollection=`<div class="resultCollection">
+          <h3 class="collectionTag" style="background-color:grey;">~</h3>
+          <ul>`;
+      }
+
+      currentCollection+=`<li class="featListing" data-feat-id="${key}">${feat.Name}</li>`;
+
+      if (listingCount==4 || featKeys.length==0){
+
+          currentCollection+=`</ul>
+        </div>`;
+        finalCollection+=currentCollection;
+        listingCount=0;
+      }else{
+        listingCount++;
+      }
+
+
+
+    }
+
+    $("#featSelection").html(finalCollection);
+    console.log(finalCollection);
+    console.log(Boolean(finalCollection));
+    if (finalCollection.length==0){
+      ci.fyiUser("No feats to show, try loosening your search results!");
+    }
+    $(".featListing").click(displayFeat);
+    jumpTo("featSelection");
+
+    function alphabetizeKeys(a, b){
+      return featList[a].Name.localeCompare(featList[b].Name);
+    }
+
+    function featKeyFilter(feat){
+
+      let sourceText="";
+      let bodyText="";
+      feat=featList[feat];
+
+      sourceText+=feat.Source.toLowerCase()+feat.Author.toLowerCase();
+
+
+      bodyText=feat.Name.toLowerCase()+feat.Benefit.toLowerCase();
+
+      for (let i=0; i<featFilter.textTags.length; i++){
+        if (!bodyText.includes(featFilter.textTags[i].toLowerCase()) ){
+
+          return false;
+        }
+
+      }
+      for (let i=0; i<featFilter.sourceTags.length; i++){
+        if (!sourceText.includes(featFilter.sourceTags[i].toLowerCase()) ){
+
+          return false;
+        }
+
+      }
+
+      return true;
+    }
+  }
+}
+
 function displayFeat(){
   let feat = featList[this.getAttribute("data-feat-id")];
   let displayText=`<hr>
@@ -308,7 +893,12 @@ function jumpTo(anchor){
 function loadData(){
   $.getJSON( "src/model/testFeats.json", function( data ) {
 
+
     featList=data;
+    Object.keys(featList).forEach((feat)=>{
+      featList[feat]=stringNulls(featList[feat]);
+    });
+    console.log(featList);
     //doneLoading();
   });
 
@@ -317,7 +907,37 @@ function loadData(){
     spellList=data;
     //doneLoading();
   });
+  $.getJSON( "src/model/baseItems.json", function( data ) {
 
+    itemList=data;
+    //doneLoading();
+  });
+  $.getJSON( "src/model/baseMonsters.json", function( data ) {
+
+    creatureList=data;
+
+    creatureList.forEach((creature)=>{
+      if (!creatureFilter.loadedTypes.includes(creature.type)){
+        creatureFilter.loadedTypes.push(creature.type);
+        creatureFilter.type.push(creature.type);
+      }
+    });
+
+    //doneLoading();
+  });
+
+}
+
+function stringNulls(obj){
+
+  Object.keys(obj).forEach((key)=>{
+
+    if (obj[key]==null){
+
+      obj[key]="";
+    }
+  });
+  return obj;
 }
 
 function loadUserFeats(){
@@ -325,72 +945,9 @@ function loadUserFeats(){
 }
 
 function createFeatList(){
-  let featKeys=Object.keys(featList);
-  let finalCollection="";
-  let currentCollection="";
-  let listingCount=0;
-  featKeys.sort(alphabetizeKeys);
-  if (searchTags.length){
-    featKeys=featKeys.filter((feat)=>{
-      return featFilter(feat);
-    });
-  }
 
-  while (featKeys.length){
-    let key=featKeys.shift();
-    let feat=featList[key];
-
-    if (listingCount==0){
-      currentCollection=`<div class="resultCollection">
-        <h3 class="collectionTag" style="background-color:grey;">~</h3>
-        <ul>`;
-    }
-
-    currentCollection+=`<li class="featListing" data-feat-id="${key}">${feat.Name}</li>`;
-
-    if (listingCount==4 || featKeys.length==0){
-
-        currentCollection+=`</ul>
-      </div>`;
-      finalCollection+=currentCollection;
-      listingCount=0;
-    }else{
-      listingCount++;
-    }
-
-
-
-  }
-
-  $("#featSelection").html(finalCollection);
-  console.log(finalCollection);
-  console.log(Boolean(finalCollection));
-  if (finalCollection.length==0){
-    ci.fyiUser("No feats to show, try loosening your search results!");
-  }
-  $(".featListing").click(displayFeat);
-  jumpTo("featSelection");
-
-  function alphabetizeKeys(a, b){
-    return featList[a].Name.localeCompare(featList[b].Name);
-  }
-
-  function featFilter(feat){
-    feat=featList[feat];
-    for (let i=0; i<searchTags.length; i++){
-      if (!feat.Name.toLowerCase().includes(searchTags[i].toLowerCase()) && !feat.Benefit.toLowerCase().includes(searchTags[i].toLowerCase())){
-        return false;
-      }
-
-    }
-
-    return true;
-  }
 }
 
 function featSearch(){
-  console.log($("#searchTags").tagit("assignedTags"));
-  searchTags=$("#searchTags").tagit("assignedTags");
 
-  createFeatList();
 }

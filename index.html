@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>5e Compendium</title>
-
+<!-- Monsters courtesy of droid druid's json file: https://www.reddit.com/r/dndnext/comments/43a09o/srd_monsters_in_json_format/ -->
   <!-- Jquery and Tag-it -->
   <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -57,7 +59,7 @@
     </div>
     <div class="row h-25">
       <div class="offset-3 col-5" >
-        <p id="bannerTagline">"Is it going to far when even your srd is homebrewed?"</p>
+        <p id="bannerTagline">"Is it going too far when even your srd is homebrewed?"</p>
       </div>
     </div>
 
@@ -70,7 +72,8 @@
           <ul>
             <li class="navEntry" id="featNav">Feats  </li><br>
             <li class="navEntry" id="classNav">Classes  [Under Construction]</li><br>
-            <li class="navEntry" id="itemNav">Wondrous Items  [Under Construction]</li><br>
+            <li class="navEntry" id="itemNav">Magic Items </li><br>
+            <li class="navEntry" id="creatureNav">Bestiary (Monsters) </li><br>
             <li class="navEntry" id="spellNav">Spells</li><br>
             <li class="navEntry" id="moduleNav">Mechanic Modules <br>[Under Construction]</li><br>
             <li class="navEntry selectedNav" id="customNav">Customization</li><br>
@@ -78,56 +81,51 @@
         </div>
       </div>
       <div id="contentSpace">
-        <div id="spellSearch">
+        <div id="creatureSearch">
           <!-- [Accepts Multiple comma seperated values]
           Filter Name: <input type="text">
           Filter Author: <input type="text"> -->
           <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
-          Search:<input id="searchTags"></input><br>
-          Spell Levels:<form id="spellLevelFilter" class="form-check form-check-inline">
-            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox0" value="0">
-            <label class="form-check-label" for="spellCheckBox0">0</label>]&nbsp;
-            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox1" value="1">
-            <label class="form-check-label" for="spellCheckBox1">1</label>]&nbsp;
-            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox2" value="2">
-            <label class="form-check-label" for="spellCheckBox2">2</label>]&nbsp;
-            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox3" value="3">
-            <label class="form-check-label" for="spellCheckBox3">3</label>]&nbsp;
-            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox4" value="4">
-            <label class="form-check-label" for="spellCheckBox4">4</label>]&nbsp;
-            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox5" value="5">
-            <label class="form-check-label" for="spellCheckBox5">5</label>]&nbsp;
-            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox6" value="6">
-            <label class="form-check-label" for="spellCheckBox6">6</label>]&nbsp;
-            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox7" value="7">
-            <label class="form-check-label" for="spellCheckBox7">7</label>]&nbsp;
-            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox8" value="8">
-            <label class="form-check-label" for="spellCheckBox8">8</label>]&nbsp;
-            [<input checked class="form-check-input" type="checkbox" id="spellCheckBox9" value="9">
-            <label class="form-check-label" for="spellCheckBox9">9</label>]&nbsp;
-          </form><br><br>
-          Schools:<select id="spellSchoolFilter" title="NO SCHOOLS SELECTED!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
-              <option value="abjuration" selected>Abjuration</option>
-              <option value="conjuration" selected>Conjuration</option>
-              <option value="divination" selected>Divination</option>
-              <option value="enchantment" selected>Enchantment</option>
-              <option value="evocation" selected>Evocation</option>
-              <option value="illusion" selected>Illusion</option>
-              <option value="necromancy" selected>Necromancy</option>
-              <option value="transmutation" selected>Transmutation</option>
-              <option value="universal" selected>Universal</option>
+          Text Search:<input id="searchTags"></input><br>
+
+          <div style="display:flex;">
+            <div style="text-align:center;"><u>Min</u><br>
+              <input id="crMinFilter" type="number">
+            </div>
+            <div  style="text-align:center; align-self:baseline">|CR Range|</div>
+            <div  style="text-align:center;"><u>Max</u><br>
+              <input id="crMaxFilter" type="number"></div>
+          </div>
+          <br><br>
+          Alignment Filter:<br><select id="creatureAlignmentFilter" title="NO TYPES SELECTED!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
+              <option value="lawful good" selected>Lawful Good</option>
+              <option value="lawful neutral" selected>Lawful Neutral</option>
+              <option value="lawful evil" selected>Lawful Evil</option>
+              <option value="neutral good" selected>Neutral Good</option>
+              <option value="neutral" selected>True Neutral</option>
+              <option value="neutral evil" selected>Neutral Evil</option>
+              <option value="chaotic good" selected>Chaotic Good</option>
+              <option value="chaotic neutral" selected>Chaotic Neutral</option>
+              <option value="chaotic evil" selected>Chaotic Evil</option>
             </select><br><br>
+          Type Filter:<br><select id="creatureTypeFilter" title="NO RARITIES SELECTED!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
+
+            </select><br><br>
+            <hr>
+          Source/Author Search:<input id="sourceTags"></input><br>
 
 
-          <button onclick="Spells.search()">Confirm</button>
+          <button onclick="Creatures.search()">Search</button>
           <hr>
-          <h3 class="sourceTag" style="background-color:grey;">Selected Spell:</h3>
+          <h3 class="sourceTag" style="background-color:grey;">Selected Creature:</h3>
         </div>
-        <div id="spellDisplay" style="padding-left:2vw;">
+        <div id="creatureDisplay" style="padding-left:2vw;">
+          <hr>
 
+          <hr>
         </div>
-        <h3 class="sourceTag" style="background-color:grey;">Valid Spells:</h3>
-        <div id="spellSelection" class="selectionSpace">
+        <h3 class="sourceTag" style="background-color:grey;">Valid Items:</h3>
+        <div id="creatureSelection" class="selectionSpace">
         </div>
       </div>
 

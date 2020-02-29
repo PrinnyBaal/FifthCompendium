@@ -10,12 +10,33 @@
 
 let featList=false;
 let spellList=false;
-let searchTags=[];
+let itemList=false;
+let creatureList=false;
+//let searchTags=[];
 let spellFilter={
   textTags:[],
   levelTags:["0","1","2","3","4","5","6","7","8","9"],
   schoolTags:["transmutation", "abjuration", "conjuration", "necromancy", "enchantment", "evocation", "illusion", "divination", "universal"],
 
+}
+let itemFilter={
+  textTags:[],
+  attunement:"either", //attuned, unattuned or either
+  itemTypes:["weapon", "armor", "rod", "wondrous", "potion", "ring", "scroll", "staff", "wand"],
+  rarity:["common", "uncommon", "rare", "very rare", "legendary"],
+
+}
+let creatureFilter={
+  textTags:[],
+  cr:{min:0, max:30},
+  type:[],
+  alignment:["lawful good", "lawful neutral", "lawful evil", "neutral good", "neutral", "neutral evil", "chaotic good", "chaotic neutral", "chaotic evil", "unaligned"],
+  //
+  loadedTypes:[]
+}
+let featFilter={
+  textTags:[],
+  sourceTags:[]
 }
 
 
