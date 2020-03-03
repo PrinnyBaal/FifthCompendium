@@ -12,6 +12,7 @@ let featList=false;
 let spellList=false;
 let itemList=false;
 let creatureList=false;
+let moduleList=false;
 //let searchTags=[];
 let spellFilter={
   textTags:[],
@@ -37,6 +38,12 @@ let creatureFilter={
 let featFilter={
   textTags:[],
   sourceTags:[]
+}
+
+let moduleFilter={
+  tagList:[],
+  sourceTags:[],
+  validTags:[]
 }
 
 

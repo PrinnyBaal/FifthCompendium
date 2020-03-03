@@ -70,62 +70,54 @@
       <div id="navsegment" >
         <div id="navbar">
           <ul>
-            <li class="navEntry" id="featNav">Feats  </li><br>
-            <li class="navEntry" id="classNav">Classes  [Under Construction]</li><br>
-            <li class="navEntry" id="itemNav">Magic Items </li><br>
-            <li class="navEntry" id="creatureNav">Bestiary (Monsters) </li><br>
-            <li class="navEntry" id="spellNav">Spells</li><br>
-            <li class="navEntry" id="moduleNav">Mechanic Modules <br>[Under Construction]</li><br>
-            <li class="navEntry selectedNav" id="customNav">Customization</li><br>
+            <li class="navEntry" id="featNav">Feats  </li>
+            <li class="navEntry" id="classNav">Classes  [Under Construction]</li>
+            <li class="navEntry" id="itemNav">Magic Items </li>
+            <li class="navEntry" id="creatureNav">Bestiary (Monsters) </li>
+            <li class="navEntry" id="spellNav">Spells</li>
+            <li class="navEntry" id="moduleNav">Mechanic Modules</li>
+            <li class="navEntry selectedNav" id="customNav">Customization</li>
           </ul>
         </div>
       </div>
       <div id="contentSpace">
-        <div id="creatureSearch">
+        <div id="moduleSearch">
           <!-- [Accepts Multiple comma seperated values]
           Filter Name: <input type="text">
           Filter Author: <input type="text"> -->
           <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
-          Text Search:<input id="searchTags"></input><br>
+          Tag Search:<input id="searchTags"></input><br>
 
-          <div style="display:flex;">
-            <div style="text-align:center;"><u>Min</u><br>
-              <input id="crMinFilter" type="number">
-            </div>
-            <div  style="text-align:center; align-self:baseline">|CR Range|</div>
-            <div  style="text-align:center;"><u>Max</u><br>
-              <input id="crMaxFilter" type="number"></div>
-          </div>
-          <br><br>
-          Alignment Filter:<br><select id="creatureAlignmentFilter" title="NO TYPES SELECTED!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
-              <option value="lawful good" selected>Lawful Good</option>
-              <option value="lawful neutral" selected>Lawful Neutral</option>
-              <option value="lawful evil" selected>Lawful Evil</option>
-              <option value="neutral good" selected>Neutral Good</option>
-              <option value="neutral" selected>True Neutral</option>
-              <option value="neutral evil" selected>Neutral Evil</option>
-              <option value="chaotic good" selected>Chaotic Good</option>
-              <option value="chaotic neutral" selected>Chaotic Neutral</option>
-              <option value="chaotic evil" selected>Chaotic Evil</option>
-            </select><br><br>
-          Type Filter:<br><select id="creatureTypeFilter" title="NO RARITIES SELECTED!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
 
-            </select><br><br>
-            <hr>
           Source/Author Search:<input id="sourceTags"></input><br>
 
 
-          <button onclick="Creatures.search()">Search</button>
+          <button onclick="Modules.search()">Search</button>
           <hr>
-          <h3 class="sourceTag" style="background-color:grey;">Selected Creature:</h3>
+          <h3 class="sourceTag" style="background-color:grey;">Selected Module:</h3>
         </div>
-        <div id="creatureDisplay" style="padding-left:2vw;">
+        <div id="moduleDisplay" style="padding-left:2vw;">
           <hr>
-
+          <div class="navBox">
+            <ul>
+              <li class="navEntry" id="featNav">Feats  </li>
+              <li class="navEntry" id="classNav">Classes  [Under Construction]</li>
+              <li class="navEntry" id="itemNav">Magic Items </li>
+              <li class="navEntry" id="creatureNav">Bestiary (Monsters) </li>
+              <li class="navEntry" id="spellNav">Spells</li>
+              <li class="navEntry" id="moduleNav">Mechanic Modules</li>
+              <li class="navEntry selectedNav" id="customNav">Customization</li>
+            </ul>
+          </div>
+          <hr>
+            <h4 class="sourceTag" style="background-color:blue;" class="moduleSectionTitle">Other Section Title</h4>
+            <p class="moduleContent">
+              There is no form of combat more civilized than the duel. Be it with steel or spells, duels are used to settle disputes in situations where a chaotic melee would be disruptive or even illegal. Although duels are often considered honorable, this does not necessarily make them any less deadly. Duels often permit combatants to engage in more even fights than the fracas of the battlefield, allowing the true skill, power, and wit of each to determine the victor.
+            </p>
           <hr>
         </div>
-        <h3 class="sourceTag" style="background-color:grey;">Valid Items:</h3>
-        <div id="creatureSelection" class="selectionSpace">
+        <h3 class="sourceTag" style="background-color:grey;">Valid Articles:</h3>
+        <div id="moduleSelection" class="selectionSpace">
         </div>
       </div>
 

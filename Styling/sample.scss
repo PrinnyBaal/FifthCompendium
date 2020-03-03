@@ -50,21 +50,24 @@ html {
 
       top:5px;
       left:0;
-      background-color:white;
-      color:blue;
+      background-color:$lightBack;
+      color:$darkBack;
       width:15vw;
       min-width:100px;
       border: 2px solid silver;
       border-radius:5%;
       height:auto;
       overflow:hidden;
-      .navEntry{
 
+      .navEntry{
+        border-bottom:2px dashed black;
+        padding-top:.5em;
       }
 
       .navEntry.selectedNav{
         font-weight: bold;
         text-decoration: underline;
+        color:$flairColor;
       }
     }
   }
@@ -72,8 +75,9 @@ html {
 
   #contentSpace{
     width:70vw;
-    min-width:300px;
+    //min-width:300px;
     padding-left:5vw;
+
 
     .selectionSpace{
       display:flex;
@@ -82,14 +86,36 @@ html {
 
 
       .resultCollection{
-        background-color:white;
-        color:blue;
+        background-color:$lightBack;
+        color:$flairColor;
         width:30%;
         min-width:200px;
         border: 2px solid silver;
         border-radius:5%;
         height:auto;
         margin-top:2rem;
+
+        .creatureListing{
+          list-style-image:url("../images/dragon_Icon8.png");
+        }
+        .spellListing{
+          list-style-image:url("../images/scroll_Icon8.png");
+        }
+
+        .featListing{
+          list-style-image:url("../images/feather_Icon8.png");
+        }
+        .itemListing{
+          list-style-image:url("../images/potion_Icon8.png");
+        }
+
+        .moduleListing{
+          list-style-image:url("../images/books_Icon8.png");
+        }
+        .collectionTag{
+          height:1em;
+          background-color:grey;
+        }
       }
     }
 
@@ -100,7 +126,33 @@ html {
 
 
 
+////
+.navBox{
+  border:2px solid black;
+  background-color:$lightBack;
+  color:$darkBack;
+  // width:fit-content;
+  width:13vw;
 
+  position: fixed;
+  bottom: 0;
+  right: 0;
+
+  .navEntry{
+    border-bottom:2px dashed black;
+    padding-top:.5em;
+    list-style-type: circle;
+  }
+}
+
+.moduleSectionTitle{
+  color:$lightBack;
+  background-color:$darkBack;
+}
+
+.moduleContent{
+  white-space:pre-wrap;
+}
 
 
 ///////
@@ -115,6 +167,26 @@ html {
   td{
     border:2px solid black;
     text-align:center;
+  }
+  td:nth-child(even){
+    background-color: #c9c1c1;
+  }
+}
+
+.ruleModuleTable{
+  border: 1px solid black;
+  background-color: #EEEEEE;
+  th{
+    background: red;
+    text-align:center;
+    border: 1px solid black;
+  }
+  td{
+    border:2px solid black;
+    text-align:center;
+  }
+  td:nth-child(even){
+    background-color: #c9c1c1;
   }
 }
 

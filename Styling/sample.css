@@ -26,8 +26,8 @@ html {
 #workSpace #navsegment #navbar {
   top: 5px;
   left: 0;
-  background-color: white;
-  color: blue;
+  background-color: #eeeeee;
+  color: #222831;
   width: 15vw;
   min-width: 100px;
   border: 2px solid silver;
@@ -35,13 +35,17 @@ html {
   height: auto;
   overflow: hidden;
 }
+#workSpace #navsegment #navbar .navEntry {
+  border-bottom: 2px dashed black;
+  padding-top: 0.5em;
+}
 #workSpace #navsegment #navbar .navEntry.selectedNav {
   font-weight: bold;
   text-decoration: underline;
+  color: #d65a31;
 }
 #workSpace #contentSpace {
   width: 70vw;
-  min-width: 300px;
   padding-left: 5vw;
 }
 #workSpace #contentSpace .selectionSpace {
@@ -50,14 +54,57 @@ html {
   flex-wrap: wrap;
 }
 #workSpace #contentSpace .selectionSpace .resultCollection {
-  background-color: white;
-  color: blue;
+  background-color: #eeeeee;
+  color: #d65a31;
   width: 30%;
   min-width: 200px;
   border: 2px solid silver;
   border-radius: 5%;
   height: auto;
   margin-top: 2rem;
+}
+#workSpace #contentSpace .selectionSpace .resultCollection .creatureListing {
+  list-style-image: url("../images/dragon_Icon8.png");
+}
+#workSpace #contentSpace .selectionSpace .resultCollection .spellListing {
+  list-style-image: url("../images/scroll_Icon8.png");
+}
+#workSpace #contentSpace .selectionSpace .resultCollection .featListing {
+  list-style-image: url("../images/feather_Icon8.png");
+}
+#workSpace #contentSpace .selectionSpace .resultCollection .itemListing {
+  list-style-image: url("../images/potion_Icon8.png");
+}
+#workSpace #contentSpace .selectionSpace .resultCollection .moduleListing {
+  list-style-image: url("../images/books_Icon8.png");
+}
+#workSpace #contentSpace .selectionSpace .resultCollection .collectionTag {
+  height: 1em;
+  background-color: grey;
+}
+
+.navBox {
+  border: 2px solid black;
+  background-color: #eeeeee;
+  color: #222831;
+  width: 13vw;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+.navBox .navEntry {
+  border-bottom: 2px dashed black;
+  padding-top: 0.5em;
+  list-style-type: circle;
+}
+
+.moduleSectionTitle {
+  color: #eeeeee;
+  background-color: #222831;
+}
+
+.moduleContent {
+  white-space: pre-wrap;
 }
 
 .statTable {
@@ -71,6 +118,26 @@ html {
 .statTable td {
   border: 2px solid black;
   text-align: center;
+}
+.statTable td:nth-child(even) {
+  background-color: #c9c1c1;
+}
+
+.ruleModuleTable {
+  border: 1px solid black;
+  background-color: #EEEEEE;
+}
+.ruleModuleTable th {
+  background: red;
+  text-align: center;
+  border: 1px solid black;
+}
+.ruleModuleTable td {
+  border: 2px solid black;
+  text-align: center;
+}
+.ruleModuleTable td:nth-child(even) {
+  background-color: #c9c1c1;
 }
 
 .hoverFlow {

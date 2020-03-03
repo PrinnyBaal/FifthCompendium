@@ -5,7 +5,7 @@ sheetProj.view.sheetLogic = {
     $("#searchTags").tagit({caseSensitive:false});
     loadData();
     activateNavbar();
-    //Pages.Customize();
+    Pages.Customize();
   }
 };
 
@@ -42,6 +42,11 @@ function activateNavbar(){
     $(".selectedNav").removeClass("selectedNav");
     $(event.target).addClass("selectedNav");
   });
+  $("#moduleNav").click(()=>{
+    Pages.Modules();
+    $(".selectedNav").removeClass("selectedNav");
+    $(event.target).addClass("selectedNav");
+  });
 }
 
 const Pages={
@@ -66,6 +71,33 @@ const Pages={
     </div>`;
     Pages.SetContent(pageContent);
     Feats.createList();
+
+  },
+  Modules:()=>{
+    let pageContent=`<div id="moduleSearch">
+      <!-- [Accepts Multiple comma seperated values]
+      Filter Name: <input type="text">
+      Filter Author: <input type="text"> -->
+      <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
+      Tag Search:<input id="searchTags" class="tagit"></input><br>
+
+
+      Source/Author Search:<input id="sourceTags" class="tagit"></input><br>
+
+
+      <button onclick="Modules.search()">Search</button>
+      <hr>
+      <h3 class="sourceTag" style="background-color:grey;">Selected Module:</h3>
+    </div>
+    <div id="moduleDisplay" style="padding-left:2vw;">
+
+    </div>
+    <h3 class="sourceTag" style="background-color:grey;">Valid Articles:</h3>
+    <div id="moduleSelection" class="selectionSpace">
+    </div>`;
+    Pages.SetContent(pageContent);
+    Modules.createList();
+    $("#searchTags").tagit({availableTags: moduleFilter.validTags});
 
   },
   Customize:()=>{
@@ -297,7 +329,6 @@ const Spells={
 
     spellFilter.schoolTags=$("#spellSchoolFilter").val();
 
-      console.log(spellFilter);
     Spells.createList();
   },
   createList:()=>{
@@ -318,7 +349,7 @@ const Spells={
 
       if (listingCount==0){
         currentCollection=`<div class="resultCollection">
-          <h3 class="collectionTag" style="background-color:grey;">~</h3>
+          <h3 class="collectionTag"></h3>
           <ul>`;
       }
 
@@ -358,7 +389,7 @@ const Spells={
           let textCheck=spell.Name+spell.CastTime+spell.Range+spell.Components+spell.Duration+spell.Description;
           if (!textCheck.toLowerCase().includes(spellFilter.textTags[i].toLowerCase())){
 
-            console.log("doesn't include: "+spellFilter.textTags[i].toLowerCase());
+
             return false;
           }
 
@@ -367,16 +398,12 @@ const Spells={
 
       //level filter
       if (!spellFilter.levelTags.includes(spell.Level.toString())){
-        console.log(spellFilter.levelTags);
-        console.log("doesn't include: ");
-        console.log(spell.Level);
+
         return false;
       }
       //school filter
       if (!spellFilter.schoolTags.includes(spell.School.toLowerCase())){
-        console.log(spellFilter.schoolTags);
-        console.log("doesn't include: ");
-        console.log(spell.School);
+
         return false;
       }
 
@@ -384,7 +411,7 @@ const Spells={
     }
   },
   displaySpell:(event)=>{
-    // console.log(this);
+
 
     let spell = spellList[event.target.getAttribute("data-spell-id")];
     let displayText=`<hr>
@@ -444,7 +471,7 @@ const Items={
 
       if (listingCount==0){
         currentCollection=`<div class="resultCollection">
-          <h3 class="collectionTag" style="background-color:grey;">~</h3>
+          <h3 class="collectionTag"></h3>
           <ul>`;
       }
 
@@ -486,7 +513,7 @@ const Items={
           if (item.Attunement){textCheck+=item.Attunement};
           if (!textCheck.toLowerCase().includes(itemFilter.textTags[i].toLowerCase())){
 
-            console.log("doesn't include: "+itemFilter.textTags[i].toLowerCase());
+
             return false;
           }
 
@@ -515,9 +542,7 @@ const Items={
       }
       //rarity filter
       if (!itemFilter.rarity.includes(item.Rarity)){
-        console.log(itemFilter.rarity);
-        console.log("doesn't include: ");
-        console.log(item.Rarity);
+
         return false;
       }
 
@@ -536,7 +561,7 @@ const Items={
     }
   },
   displayItem:(event)=>{
-    // console.log(this);
+
 
     let item = itemList[event.target.getAttribute("data-item-id")];
     let displayText=`<hr>
@@ -550,6 +575,158 @@ const Items={
     <hr>`;
     $("#itemDisplay").html(displayText);
     jumpTo("itemDisplay");
+  }
+}
+
+const Modules={
+  search:()=>{
+
+    //TODO
+    moduleFilter.tagList=$("#searchTags").tagit("assignedTags");
+    moduleFilter.sourceTags=$("#sourceTags").tagit("assignedTags");
+
+
+
+
+
+    Modules.createList();
+  },
+  createList:()=>{
+    let moduleKeys=Object.keys(moduleList);
+    let finalCollection="";
+    let currentCollection="";
+    let listingCount=0;
+
+    //sort and filter
+
+    moduleKeys.sort(alphabetizeKeys);
+
+
+    moduleKeys=moduleKeys.filter((mod)=>{
+      return moduleKeyFilter(mod);
+    });
+
+
+    while (moduleKeys.length){
+      let key=moduleKeys.shift();
+      let mod=moduleList[key];
+
+      if (listingCount==0){
+        currentCollection=`<div class="resultCollection">
+          <h3 class="collectionTag"></h3>
+          <ul>`;
+      }
+
+      currentCollection+=`<li class="moduleListing" data-module-id="${key}">${key}</li>`;
+
+      if (listingCount==4 || moduleKeys.length==0){
+
+          currentCollection+=`</ul>
+        </div>`;
+        finalCollection+=currentCollection;
+        listingCount=0;
+      }else{
+        listingCount++;
+      }
+
+
+
+    }
+
+    $("#moduleSelection").html(finalCollection);
+
+    if (finalCollection.length==0){
+      ci.fyiUser("No modules to show, try loosening your search results!");
+    }
+    $(".moduleListing").click(Modules.displayModule);
+    jumpTo("moduleSelection");
+
+    function alphabetizeKeys(a, b){
+      return a.localeCompare(b);
+    }
+
+    function moduleKeyFilter(mod){
+
+      let modtags;
+      mod=moduleList[mod];
+      console.log(mod.Tags.sectionText);
+      modTags=mod.Tags.sectionText;
+      //search filter
+      if (moduleFilter.tagList.length){
+
+        for (let i=0; i<moduleFilter.tagList.length; i++){
+
+          if (!modTags.map(elem=>elem.toLowerCase()).includes(moduleFilter.tagList[i].toLowerCase())){
+            return false;
+          }
+        }
+      }
+      if (moduleFilter.sourceTags.length){
+
+        for (let i=0; i<moduleFilter.sourceTags.length; i++){
+          let textCheck=(mod.Source.sectionText+mod.Author.sectionText).toLowerCase();
+          if (!textCheck.includes(moduleFilter.sourceTags[i].toLowerCase())){
+            return false;
+          }
+        }
+      }
+
+
+
+
+
+
+      return true;
+    }
+  },
+  displayModule:(event)=>{
+
+
+    let mod = moduleList[event.target.getAttribute("data-module-id")];
+    let displayText=`<hr>
+    <h1>${event.target.getAttribute("data-module-id")}</h1>
+    <h6>Tags:${mod.Tags.sectionText}</h6>
+    <div class="navBox">
+      <ul>
+        ${createNavBox(mod)}
+
+      </ul>
+    </div>
+    <hr>
+      ${createSections(mod)}
+
+    <hr>`;
+    $("#moduleDisplay").html(displayText);
+    jumpTo("moduleDisplay");
+
+    function createNavBox(mod){
+      let navList='';
+      let keys=Object.keys(mod);
+      keys.forEach((key)=>{
+        if (key.toLowerCase()=="tags"){return;}
+        else{
+          navList+=`<li class="navEntry" onclick="jumpTo('${key.replace(/\s/g,'')}Section')">${key}</li>`;
+        }
+
+      });
+      return navList;
+    }
+
+    function createSections(mod){
+      let sectionHTML='';
+      let keys=Object.keys(mod);
+      keys.forEach((key)=>{
+        if (key.toLowerCase()=="tags"){return;}
+
+          sectionHTML+=`<h4 class="sourceTag moduleSectionTitle"  id="${key.replace(/\s/g,'')}Section">${key}</h4>
+          <p class="moduleContent">
+            ${mod[key].sectionText}
+          </p>`;
+
+
+      });
+      return sectionHTML;
+    }
   }
 }
 
@@ -579,13 +756,13 @@ const Creatures={
     let listingCount=0;
 
     //sort and filter
-    console.log(creatureKeys);
+
     creatureKeys.sort(alphabetizeKeys);
-    console.log(creatureKeys);
+
     creatureKeys=creatureKeys.filter((creature)=>{
       return creatureKeyFilter(creature);
     });
-    console.log(creatureKeys);
+
 
 
     while (creatureKeys.length){
@@ -594,7 +771,7 @@ const Creatures={
 
       if (listingCount==0){
         currentCollection=`<div class="resultCollection">
-          <h3 class="collectionTag" style="background-color:grey;">~</h3>
+          <h3 class="collectionTag"></h3>
           <ul>`;
       }
 
@@ -805,7 +982,7 @@ const Feats={
 
       if (listingCount==0){
         currentCollection=`<div class="resultCollection">
-          <h3 class="collectionTag" style="background-color:grey;">~</h3>
+          <h3 class="collectionTag"></h3>
           <ul>`;
       }
 
@@ -831,7 +1008,7 @@ const Feats={
     if (finalCollection.length==0){
       ci.fyiUser("No feats to show, try loosening your search results!");
     }
-    $(".featListing").click(displayFeat);
+    $(".featListing").click(Feats.displayFeat);
     jumpTo("featSelection");
 
     function alphabetizeKeys(a, b){
@@ -866,26 +1043,42 @@ const Feats={
 
       return true;
     }
+  },
+  displayFeat:()=>{
+    let feat = featList[this.getAttribute("data-feat-id")];
+    let displayText=`<hr>
+    <h1 id="featName">${feat.Name}</h1><br>
+    <div style="padding-left:5vw;">
+      <span id="featFlavor"><i>${feat.Flavor ? feat.Flavor:""}</i></span><br><br>
+      <span id="featPrereqs"><b>Prerequisites:</b> ${feat.Prereq ? feat.Prereq:"None"}</span><br><br>
+      <span id="featBenefit" style="white-space: pre-wrap;"><b>Benefit:</b>${feat.Benefit}</span><br><br>
+      <h3 class="sourceTag" style="background-color:grey;">Source:</h3>
+      <span id="featSourcing"><b>Author:</b> ${feat.Author ? feat.Author:"Unknown"}, <b>Collection:</b>${feat.Source ? feat.Source:"Unknown"}</span>
+    </div>
+    <hr>`;
+    $("#featDisplay").html(displayText);
+    jumpTo("featDisplay");
   }
 }
 
-function displayFeat(){
-  let feat = featList[this.getAttribute("data-feat-id")];
-  let displayText=`<hr>
-  <h1 id="featName">${feat.Name}</h1><br>
-  <div style="padding-left:5vw;">
-    <span id="featFlavor"><i>${feat.Flavor ? feat.Flavor:""}</i></span><br><br>
-    <span id="featPrereqs"><b>Prerequisites:</b> ${feat.Prereq ? feat.Prereq:"None"}</span><br><br>
-    <span id="featBenefit" style="white-space: pre-wrap;"><b>Benefit:</b>${feat.Benefit}</span><br><br>
-    <h3 class="sourceTag" style="background-color:grey;">Source:</h3>
-    <span id="featSourcing"><b>Author:</b> ${feat.Author ? feat.Author:"Unknown"}, <b>Collection:</b>${feat.Source ? feat.Source:"Unknown"}</span>
-  </div>
-  <hr>`;
-  $("#featDisplay").html(displayText);
-  jumpTo("featDisplay");
-}
+// function displayFeat(){
+//   let feat = featList[this.getAttribute("data-feat-id")];
+//   let displayText=`<hr>
+//   <h1 id="featName">${feat.Name}</h1><br>
+//   <div style="padding-left:5vw;">
+//     <span id="featFlavor"><i>${feat.Flavor ? feat.Flavor:""}</i></span><br><br>
+//     <span id="featPrereqs"><b>Prerequisites:</b> ${feat.Prereq ? feat.Prereq:"None"}</span><br><br>
+//     <span id="featBenefit" style="white-space: pre-wrap;"><b>Benefit:</b>${feat.Benefit}</span><br><br>
+//     <h3 class="sourceTag" style="background-color:grey;">Source:</h3>
+//     <span id="featSourcing"><b>Author:</b> ${feat.Author ? feat.Author:"Unknown"}, <b>Collection:</b>${feat.Source ? feat.Source:"Unknown"}</span>
+//   </div>
+//   <hr>`;
+//   $("#featDisplay").html(displayText);
+//   jumpTo("featDisplay");
+// }
 
 function jumpTo(anchor){
+  console.log(anchor);
     window.location.href = "#"+anchor;
 }
 
@@ -925,6 +1118,23 @@ function loadData(){
 
     //doneLoading();
   });
+  $.getJSON( "src/model/ruleModules.json", function( data ) {
+
+    moduleList=data;
+    console.log(moduleList);
+    Object.keys(moduleList).forEach((key)=>{
+      let mod=moduleList[key];
+
+      // mod.Tags.sectionText=JSON.parse(mod.Tags.sectionText);
+
+      mod.Tags.sectionText.forEach((tag)=>{
+        if (!moduleFilter.validTags.includes(tag)){
+          moduleFilter.validTags.push(tag);
+          }
+      });
+    });
+    //doneLoading();
+  });
 
 }
 
@@ -938,16 +1148,4 @@ function stringNulls(obj){
     }
   });
   return obj;
-}
-
-function loadUserFeats(){
-
-}
-
-function createFeatList(){
-
-}
-
-function featSearch(){
-
 }
