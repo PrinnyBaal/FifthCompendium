@@ -107,6 +107,24 @@ html {
   white-space: pre-wrap;
 }
 
+.classSectionTitle {
+  color: #eeeeee;
+  background-color: #222831;
+}
+
+.classContent {
+  white-space: pre-wrap;
+}
+
+.raceSectionTitle {
+  color: #eeeeee;
+  background-color: #222831;
+}
+
+.raceContent {
+  white-space: pre-wrap;
+}
+
 .statTable {
   border: 1px solid black;
   background-color: #EEEEEE;

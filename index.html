@@ -71,7 +71,8 @@
         <div id="navbar">
           <ul>
             <li class="navEntry" id="featNav">Feats  </li>
-            <li class="navEntry" id="classNav">Classes  [Under Construction]</li>
+            <li class="navEntry" id="classNav">Classes</li>
+            <li class="navEntry" id="raceNav">Races</li>
             <li class="navEntry" id="itemNav">Magic Items </li>
             <li class="navEntry" id="creatureNav">Bestiary (Monsters) </li>
             <li class="navEntry" id="spellNav">Spells</li>
@@ -81,42 +82,50 @@
         </div>
       </div>
       <div id="contentSpace">
-        <div id="moduleSearch">
+        <div id="classSearch">
           <!-- [Accepts Multiple comma seperated values]
           Filter Name: <input type="text">
           Filter Author: <input type="text"> -->
           <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
-          Tag Search:<input id="searchTags"></input><br>
-
+          General Search:<input id="searchTags"></input><br>
+          Hit Dice Filter:<select id="classHDFilter" title="SELECT 1+ HIT DIE!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
+                    <option value="1d6" selected>1d6</option>
+                    <option value="1d8" selected>1d8</option>
+                    <option value="1d10" selected>1d10</option>
+                    <option value="1d12" selected>1d12</option>
+                  </select><br><br>
 
           Source/Author Search:<input id="sourceTags"></input><br>
 
 
           <button onclick="Modules.search()">Search</button>
           <hr>
-          <h3 class="sourceTag" style="background-color:grey;">Selected Module:</h3>
+          <h3 class="sourceTag" style="background-color:grey;">Selected Class:</h3>
         </div>
-        <div id="moduleDisplay" style="padding-left:2vw;">
+        <div id="classDisplay" style="padding-left:2vw;">
           <hr>
-          <div class="navBox">
-            <ul>
-              <li class="navEntry" id="featNav">Feats  </li>
-              <li class="navEntry" id="classNav">Classes  [Under Construction]</li>
-              <li class="navEntry" id="itemNav">Magic Items </li>
-              <li class="navEntry" id="creatureNav">Bestiary (Monsters) </li>
-              <li class="navEntry" id="spellNav">Spells</li>
-              <li class="navEntry" id="moduleNav">Mechanic Modules</li>
-              <li class="navEntry selectedNav" id="customNav">Customization</li>
-            </ul>
-          </div>
-          <hr>
-            <h4 class="sourceTag" style="background-color:blue;" class="moduleSectionTitle">Other Section Title</h4>
-            <p class="moduleContent">
+            <h4 class="sourceTag" style="background-color:blue;" class="classSectionTitle">Other Section Title</h4>
+            <p class="classContent">
               There is no form of combat more civilized than the duel. Be it with steel or spells, duels are used to settle disputes in situations where a chaotic melee would be disruptive or even illegal. Although duels are often considered honorable, this does not necessarily make them any less deadly. Duels often permit combatants to engage in more even fights than the fracas of the battlefield, allowing the true skill, power, and wit of each to determine the victor.
             </p>
+            Class Archetype:<select id="classHDFilter" title="SELECT AN ARCHETYPE!" class="selectpicker"  data-actions-box=true >
+                      <option value="1d6">1d6</option>
+                      <option value="1d8" >1d8</option>
+                      <option value="1d10">1d10</option>
+                      <option value="1d12">1d12</option>
+                    </select><br><br>
+            <div id="classArchetypeSection">
+              <h4 class="sourceTag" style="background-color:blue;" class="classSectionTitle">Other Section Title</h4>
+              <p class="classContent">
+                There is no form of combat more civilized than the duel. Be it with steel or spells, duels are used to settle disputes in situations where a chaotic melee would be disruptive or even illegal. Although duels are often considered honorable, this does not necessarily make them any less deadly. Duels often permit combatants to engage in more even fights than the fracas of the battlefield, allowing the true skill, power, and wit of each to determine the victor.
+              </p>
+
+            </div>
           <hr>
+
         </div>
-        <h3 class="sourceTag" style="background-color:grey;">Valid Articles:</h3>
+        <h3 class="sourceTag" style="background-color:grey;">Valid Classes:</h3>
+
         <div id="moduleSelection" class="selectionSpace">
         </div>
       </div>

@@ -155,6 +155,23 @@ html {
 }
 
 
+.classSectionTitle{
+  color:$lightBack;
+  background-color:$darkBack;
+}
+.classContent{
+  white-space:pre-wrap;
+}
+
+.raceSectionTitle{
+  color:$lightBack;
+  background-color:$darkBack;
+}
+.raceContent{
+  white-space:pre-wrap;
+}
+
+
 ///////
 
 .statTable{

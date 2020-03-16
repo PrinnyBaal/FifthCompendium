@@ -13,6 +13,9 @@ let spellList=false;
 let itemList=false;
 let creatureList=false;
 let moduleList=false;
+let classList=false;
+let subraceList=false;
+let raceList=false;
 //let searchTags=[];
 let spellFilter={
   textTags:[],
@@ -44,6 +47,14 @@ let moduleFilter={
   tagList:[],
   sourceTags:[],
   validTags:[]
+}
+
+let classFilter={
+  textTags:[],
+  hitDice:["1d6", "1d8", "1d10", "1d12"],
+}
+let raceFilter={
+  textTags:[],
 }
 
 

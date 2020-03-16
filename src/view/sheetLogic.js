@@ -5,7 +5,7 @@ sheetProj.view.sheetLogic = {
     $("#searchTags").tagit({caseSensitive:false});
     loadData();
     activateNavbar();
-    Pages.Customize();
+    //Pages.Customize();
   }
 };
 
@@ -44,6 +44,16 @@ function activateNavbar(){
   });
   $("#moduleNav").click(()=>{
     Pages.Modules();
+    $(".selectedNav").removeClass("selectedNav");
+    $(event.target).addClass("selectedNav");
+  });
+  $("#classNav").click(()=>{
+    Pages.Classes();
+    $(".selectedNav").removeClass("selectedNav");
+    $(event.target).addClass("selectedNav");
+  });
+  $("#raceNav").click(()=>{
+    Pages.Races();
     $(".selectedNav").removeClass("selectedNav");
     $(event.target).addClass("selectedNav");
   });
@@ -111,6 +121,68 @@ const Pages={
    <br>
    <button onclick="Custom.loadFiles()">Upload!</button>`;
     Pages.SetContent(pageContent);
+  },
+  Classes:()=>{
+    let pageContent=`<div id="classSearch">
+              <!-- [Accepts Multiple comma seperated values]
+              Filter Name: <input type="text">
+              Filter Author: <input type="text"> -->
+              <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
+              General Search:<input id="searchText" class="tagit"></input><br>
+              Hit Dice Filter:<select id="searchDice" title="SELECT 1+ HIT DIE!" class="selectpicker" multiple data-show-content=false data-actions-box=true data-selected-text-format="count">
+                        <option value="1d6" selected>1d6</option>
+                        <option value="1d8" selected>1d8</option>
+                        <option value="1d10" selected>1d10</option>
+                        <option value="1d12" selected>1d12</option>
+                      </select><br><br>
+
+
+
+
+              <button onclick="Classes.search()">Search</button>
+              <hr>
+              <h3 class="sourceTag" style="background-color:grey;">Selected Class:</h3>
+            </div>
+            <div id="classDisplay" style="padding-left:2vw;">
+              <hr>
+
+              <hr>
+
+            </div>
+            <h3 class="sourceTag" style="background-color:grey;">Valid Classes:</h3>
+
+            <div id="classSelection" class="selectionSpace">
+            </div>`;
+    Pages.SetContent(pageContent);
+    Classes.createList();
+    $("#searchTags").tagit({availableTags: moduleFilter.validTags});
+
+  },
+  Races:()=>{
+    let pageContent=`<div id="raceSearch">
+              <!-- [Accepts Multiple comma seperated values]
+              Filter Name: <input type="text">
+              Filter Author: <input type="text"> -->
+              <h3 class="sourceTag" style="background-color:grey;">Filter:</h3>
+              General Search:<input id="searchText" class="tagit"></input><br>
+              <button onclick="Races.search()">Search</button>
+              <hr>
+              <h3 class="sourceTag" style="background-color:grey;">Selected Race:</h3>
+            </div>
+            <div id="raceDisplay" style="padding-left:2vw;">
+              <hr>
+
+              <hr>
+
+            </div>
+            <h3 class="sourceTag" style="background-color:grey;">Valid Races:</h3>
+
+            <div id="raceSelection" class="selectionSpace">
+            </div>`;
+    Pages.SetContent(pageContent);
+    Races.createList();
+    $("#searchTags").tagit({availableTags: moduleFilter.validTags});
+
   },
   Spells:()=>{
     let pageContent=`<div id="spellSearch">
@@ -649,7 +721,7 @@ const Modules={
 
       let modtags;
       mod=moduleList[mod];
-      console.log(mod.Tags.sectionText);
+
       modTags=mod.Tags.sectionText;
       //search filter
       if (moduleFilter.tagList.length){
@@ -852,7 +924,7 @@ const Creatures={
     }
   },
   displayCreature:(event)=>{
-    // console.log(this);
+
 
     let creature = creatureList[event.target.getAttribute("data-creature-id")];
     let displayText=`<hr>
@@ -957,7 +1029,7 @@ const Creatures={
 
 const Feats={
   search:()=>{
-    console.log($("#searchTags").tagit("assignedTags"));
+
     featFilter.textTags=$("#searchTags").tagit("assignedTags");
     featFilter.sourceTags=$("#sourceTags").tagit("assignedTags");
 
@@ -1003,8 +1075,7 @@ const Feats={
     }
 
     $("#featSelection").html(finalCollection);
-    console.log(finalCollection);
-    console.log(Boolean(finalCollection));
+
     if (finalCollection.length==0){
       ci.fyiUser("No feats to show, try loosening your search results!");
     }
@@ -1045,7 +1116,7 @@ const Feats={
     }
   },
   displayFeat:()=>{
-    let feat = featList[this.getAttribute("data-feat-id")];
+    let feat = featList[event.target.getAttribute("data-feat-id")];
     let displayText=`<hr>
     <h1 id="featName">${feat.Name}</h1><br>
     <div style="padding-left:5vw;">
@@ -1058,6 +1129,516 @@ const Feats={
     <hr>`;
     $("#featDisplay").html(displayText);
     jumpTo("featDisplay");
+  }
+}
+
+const Classes={
+  search:()=>{
+
+    //TODO
+    classFilter.textTags=$("#searchText").tagit("assignedTags");
+    classFilter.hitDice=$("#searchDice").val();
+    //moduleFilter.sourceTags=$("#sourceTags").tagit("assignedTags");
+
+
+
+
+
+    Classes.createList();
+  },
+  createList:()=>{
+    let classKeys=Object.keys(classList);
+    let finalCollection="";
+    let currentCollection="";
+    let listingCount=0;
+
+    //sort and filter
+
+    classKeys.sort(alphabetizeKeys);
+
+
+    classKeys=classKeys.filter((elem)=>{
+      return classKeyFilter(elem);
+    });
+
+
+    while (classKeys.length){
+      let key=classKeys.shift();
+      let mod=classList[key];
+
+      if (listingCount==0){
+        currentCollection=`<div class="resultCollection">
+          <h3 class="collectionTag"></h3>
+          <ul>`;
+      }
+
+      currentCollection+=`<li class="classListing" data-class-id="${key}">${key}</li>`;
+
+      if (listingCount==4 || classKeys.length==0){
+
+          currentCollection+=`</ul>
+        </div>`;
+        finalCollection+=currentCollection;
+        listingCount=0;
+      }else{
+        listingCount++;
+      }
+
+
+
+    }
+
+    $("#classSelection").html(finalCollection);
+
+    if (finalCollection.length==0){
+      ci.fyiUser("No classs to show, try loosening your search results!");
+    }
+    $(".classListing").click(Classes.displayClass);
+    jumpTo("classSelection");
+
+    function alphabetizeKeys(a, b){
+      return a.localeCompare(b);
+    }
+
+    function classKeyFilter(elem){
+
+      //let classTags;
+      let genText="";
+
+      elem=classList[elem];
+
+      if (elem.IsArchetype.sectionText){
+        return false;
+      }
+
+      Object.keys(elem).forEach((key=>{
+        genText+=key;
+        genText+=elem[key].sectionText;
+      }));
+      genText=genText.toLowerCase();
+      //classTags=elem.Tags.sectionText;
+      //search filter
+      if (classFilter.textTags.length){
+        for (let i=0, len=classFilter.textTags.length; i<len; i++){
+          if (!genText.includes(classFilter.textTags[i].toLowerCase())){
+            return false;
+          }
+        }
+      }
+      if (!classFilter.hitDice.includes(elem.HitDice.sectionText)){
+        return false;
+      }
+
+
+
+
+
+
+      return true;
+    }
+  },
+  displayClass:(event)=>{
+
+
+    let elem = classList[event.target.getAttribute("data-class-id")];
+
+
+    let displayText=`<hr>
+    <h1>${elem.Name.sectionText}</h1>
+
+    <hr>
+      ${createSections(elem)}
+      Class Archetype:<select onchange="Classes.appendArchetype()" id="classArchetypeSelect" title="SELECT AN ARCHETYPE!" class="selectpicker"  data-actions-box=true >
+                ${getArchetypes(event.target.getAttribute("data-class-id"))}
+              </select><br><br>
+      <div id="classArchetypeSection">
+
+
+      </div>
+    <hr>`;
+    $("#classDisplay").html(displayText);
+    jumpTo("classDisplay");
+    $(".selectpicker").selectpicker();
+
+    // function createNavBox(elem){
+    //   let navList='';
+    //   let keys=Object.keys(elem);
+    //   keys.forEach((key)=>{
+    //     if (key.toLowerCase()=="tags"){return;}
+    //     else{
+    //       navList+=`<li class="navEntry" onclick="jumpTo('${key.replace(/\s/g,'')}Section')">${key}</li>`;
+    //     }
+    //
+    //   });
+    //   return navList;
+    // }
+
+    function getArchetypes(baseClass){
+      let archetypes=``;
+      Object.keys(classList).forEach((key)=>{
+
+        if (classList[key].IsArchetype.sectionText && classList[key].IsArchetype.sectionText==baseClass){
+          archetypes+=`<option value="${key}">${key}</option>`;
+
+        }
+      });
+      return archetypes;
+      //<option value="1d6">1d6</option>
+      //<option value="1d8" >1d8</option>
+      //<option value="1d10">1d10</option>
+    //  <option value="1d12">1d12</option>
+    }
+
+    function createSections(elem){
+      let sectionHTML='';
+      let keys=Object.keys(elem);
+      keys.forEach((key)=>{
+        let prof;
+
+        switch (key.toLowerCase()){
+
+          case "tags":
+            break;
+          case "proficiencies":
+            //// TODO:
+
+            prof=elem[key].sectionText;
+            sectionHTML+=`<h4 class="sourceTag classSectionTitle"  id="${key.replace(/\s/g,'')}Section">${key}</h4>
+            <p class="classContent">
+              <b>Armor:</b>${prof.Armor}<br>
+              <b>Weapons:</b>${prof.Weapons}<br>
+              <b>Tools:</b>${prof.Tools}<br>
+              <b>Saving Throws:</b>${prof["Saving Throws"]}<br>
+              <b>Skills:</b>${prof.Skills}<br>
+
+            </p>`;
+            break;
+          case "isarchetype":
+            break;
+          case "name":
+            break;
+          case "":
+            break;
+
+          default:
+            sectionHTML+=`<h4 class="sourceTag classSectionTitle"  id="${key.replace(/\s/g,'')}Section">${key}</h4>
+            <p class="classContent">
+              ${elem[key].sectionText}
+            </p>`;
+
+          break;
+        }
+
+
+
+
+      });
+
+
+      return sectionHTML;
+    }
+  },
+  appendArchetype:()=>{
+    let archetype=classList[event.target.value];
+    if (!archetype){
+      ci.fyiUser("Uh oh, something went wrong when loading this archetype!");
+      return;
+    }else{
+      $("#classArchetypeSection").html(createSections(archetype));
+    }
+    function createSections(elem){
+      let sectionHTML='';
+      let keys=Object.keys(elem);
+      keys.forEach((key)=>{
+        let prof;
+
+        switch (key.toLowerCase()){
+
+          case "tags":
+            break;
+          case "proficiencies":
+            //// TODO:
+
+            prof=elem[key].sectionText;
+            sectionHTML+=`<h4 class="sourceTag classSectionTitle"  id="${key.replace(/\s/g,'')}Section">${key}</h4>
+            <p class="classContent">
+              <b>Armor:</b>${prof.Armor}<br>
+              <b>Weapons:</b>${prof.Weapons}<br>
+              <b>Tools:</b>${prof.Tools}<br>
+              <b>Saving Throws:</b>${prof["Saving Throws"]}<br>
+              <b>Skills:</b>${prof.Skills}<br>
+
+            </p>`;
+            break;
+          case "isarchetype":
+            break;
+          case "name":
+            break;
+          case "":
+            break;
+
+          default:
+            sectionHTML+=`<h4 class="sourceTag classSectionTitle"  id="${key.replace(/\s/g,'')}Section">${key}</h4>
+            <p class="classContent">
+              ${elem[key].sectionText}
+            </p>`;
+
+          break;
+        }
+
+
+
+
+      });
+
+
+      return sectionHTML;
+    }
+
+  }
+}
+
+const Races={
+  search:()=>{
+
+    //TODO
+    raceFilter.textTags=$("#searchText").tagit("assignedTags");
+    //moduleFilter.sourceTags=$("#sourceTags").tagit("assignedTags");
+
+
+
+
+
+    Classes.createList();
+  },
+  createList:()=>{
+    let raceKeys=Object.keys(raceList);
+    let finalCollection="";
+    let currentCollection="";
+    let listingCount=0;
+
+    //sort and filter
+
+    raceKeys.sort(alphabetizeKeys);
+
+
+    raceKeys=raceKeys.filter((elem)=>{
+      return raceKeyFilter(elem);
+    });
+
+
+    while (raceKeys.length){
+      let key=raceKeys.shift();
+
+      if (listingCount==0){
+        currentCollection=`<div class="resultCollection">
+          <h3 class="collectionTag"></h3>
+          <ul>`;
+      }
+
+      currentCollection+=`<li class="raceListing" data-race-id="${key}">${key}</li>`;
+
+      if (listingCount==4 || raceKeys.length==0){
+
+          currentCollection+=`</ul>
+        </div>`;
+        finalCollection+=currentCollection;
+        listingCount=0;
+      }else{
+        listingCount++;
+      }
+
+
+
+    }
+
+    $("#raceSelection").html(finalCollection);
+
+    if (finalCollection.length==0){
+      ci.fyiUser("No races to show, try loosening your search results!");
+    }
+    $(".raceListing").click(Races.displayRace);
+    jumpTo("raceSelection");
+
+    function alphabetizeKeys(a, b){
+      return a.localeCompare(b);
+    }
+
+    function raceKeyFilter(elem){
+
+      //let classTags;
+      let genText="";
+
+      elem=raceList[elem];
+
+      // if (elem.IsSubrace.sectionText){
+      //   return false;
+      // }
+
+      Object.keys(elem).forEach((key=>{
+        genText+=key;
+        genText+=elem[key].sectionText;
+      }));
+      genText=genText.toLowerCase();
+      //classTags=elem.Tags.sectionText;
+      //search filter
+
+      for (let i=0, len=raceFilter.textTags.length; i<len; i++){
+
+          if (!genText.includes(raceFilter.textTags[i].toLowerCase())){
+            return false;
+          }
+      }
+
+
+
+
+
+
+
+
+      return true;
+    }
+  },
+  displayRace:(event)=>{
+
+
+    let elem = raceList[event.target.getAttribute("data-race-id")];
+
+
+    let displayText=`<hr>
+    <h1>${elem.Name.sectionText}</h1>
+
+    <hr>
+      ${createSections(elem)}
+      Subrace:<select onchange="Races.appendSubrace()" id="subraceSelect" title="Available Subraces" class="selectpicker"  data-actions-box=true >
+                ${getSubraces(event.target.getAttribute("data-race-id"))}
+              </select><br><br>
+      <div id="subraceSection">
+
+
+      </div>
+    <hr>`;
+    $("#raceDisplay").html(displayText);
+    jumpTo("raceDisplay");
+    $(".selectpicker").selectpicker();
+
+    // function createNavBox(elem){
+    //   let navList='';
+    //   let keys=Object.keys(elem);
+    //   keys.forEach((key)=>{
+    //     if (key.toLowerCase()=="tags"){return;}
+    //     else{
+    //       navList+=`<li class="navEntry" onclick="jumpTo('${key.replace(/\s/g,'')}Section')">${key}</li>`;
+    //     }
+    //
+    //   });
+    //   return navList;
+    // }
+
+    function getSubraces(baseRace){
+      let subraces=``;
+      Object.keys(subraceList).forEach((key)=>{
+
+        if (subraceList[key].BaseRace==baseRace){
+          subraces+=`<option value="${key}">${subraceList[key].Name}</option>`;
+
+        }
+      });
+      return subraces;
+      //<option value="1d6">1d6</option>
+      //<option value="1d8" >1d8</option>
+      //<option value="1d10">1d10</option>
+    //  <option value="1d12">1d12</option>
+    }
+
+    function createSections(elem){
+      let sectionHTML='';
+      let keys=Object.keys(elem);
+      keys.forEach((key)=>{
+        let prof;
+
+        switch (key.toLowerCase()){
+
+          case "tags":
+            break;
+
+          case "issubrace":
+            break;
+          case "name":
+            break;
+          case "":
+            break;
+
+          default:
+            sectionHTML+=`<h4 class="sourceTag raceSectionTitle"  id="${key.replace(/\s/g,'')}Section">${key}</h4>
+            <p class="raceContent">
+              ${elem[key].sectionText}
+            </p>`;
+
+          break;
+        }
+
+
+
+
+      });
+
+
+      return sectionHTML;
+    }
+  },
+  appendSubrace:()=>{
+    let subrace=subraceList[event.target.value];
+    if (!subrace){
+      ci.fyiUser("Uh oh, something went wrong when loading this subrace!");
+      return;
+    }else{
+      $("#subraceSection").html(createSections(subrace));
+    }
+
+
+    function createSections(elem){
+      let sectionHTML='';
+      let keys=Object.keys(elem);
+      sectionHTML+=`<h4 class="sourceTag raceSectionTitle"  id="${elem.Name.replace(/\s/g,'')}Section">${elem.Name}</h4>
+      <p class="raceContent">
+        ${elem.Flavor}<hr>
+        <div style="white-space:pre-wrap;">
+        ${elem.Benefit}
+        </div>
+      </p>`;
+      // keys.forEach((key)=>{
+      //   let prof;
+      //
+      //   switch (key.toLowerCase()){
+      //
+      //     case "baserace":
+      //       break;
+      //
+      //     case "benefit":
+      //       break;
+      //     case "name":
+      //       break;
+      //     case "":
+      //       break;
+      //
+      //     default:
+      //     console.log(elem[key]);
+      //
+      //
+      //     break;
+      //   }
+      //
+      //
+      //
+      //
+      // });
+
+
+      return sectionHTML;
+    }
+
   }
 }
 
@@ -1078,7 +1659,7 @@ const Feats={
 // }
 
 function jumpTo(anchor){
-  console.log(anchor);
+
     window.location.href = "#"+anchor;
 }
 
@@ -1091,7 +1672,7 @@ function loadData(){
     Object.keys(featList).forEach((feat)=>{
       featList[feat]=stringNulls(featList[feat]);
     });
-    console.log(featList);
+
     //doneLoading();
   });
 
@@ -1121,7 +1702,7 @@ function loadData(){
   $.getJSON( "src/model/ruleModules.json", function( data ) {
 
     moduleList=data;
-    console.log(moduleList);
+
     Object.keys(moduleList).forEach((key)=>{
       let mod=moduleList[key];
 
@@ -1133,6 +1714,65 @@ function loadData(){
           }
       });
     });
+    //doneLoading();
+  });
+
+  $.getJSON( "src/model/baseClasses.json", function( data ) {
+
+    classList=data;
+    delete classList[""];
+
+    // Object.keys(moduleList).forEach((key)=>{
+    //   let mod=moduleList[key];
+    //
+    //   // mod.Tags.sectionText=JSON.parse(mod.Tags.sectionText);
+    //
+    //   mod.Tags.sectionText.forEach((tag)=>{
+    //     if (!moduleFilter.validTags.includes(tag)){
+    //       moduleFilter.validTags.push(tag);
+    //       }
+    //   });
+    // });
+    //doneLoading();
+  });
+
+  $.getJSON( "src/model/baseRaces.json", function( data ) {
+
+    raceList=data;
+    delete raceList[""];
+
+
+    // Object.keys(moduleList).forEach((key)=>{
+    //   let mod=moduleList[key];
+    //
+    //   // mod.Tags.sectionText=JSON.parse(mod.Tags.sectionText);
+    //
+    //   mod.Tags.sectionText.forEach((tag)=>{
+    //     if (!moduleFilter.validTags.includes(tag)){
+    //       moduleFilter.validTags.push(tag);
+    //       }
+    //   });
+    // });
+    //doneLoading();
+  });
+
+  $.getJSON( "src/model/baseSubraces.json", function( data ) {
+
+    subraceList=data;
+    delete subraceList[""];
+
+
+    // Object.keys(moduleList).forEach((key)=>{
+    //   let mod=moduleList[key];
+    //
+    //   // mod.Tags.sectionText=JSON.parse(mod.Tags.sectionText);
+    //
+    //   mod.Tags.sectionText.forEach((tag)=>{
+    //     if (!moduleFilter.validTags.includes(tag)){
+    //       moduleFilter.validTags.push(tag);
+    //       }
+    //   });
+    // });
     //doneLoading();
   });
 
